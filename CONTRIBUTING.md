@@ -17,29 +17,30 @@ Before submitting, check your prompt against these:
 
 ## How to add a prompt
 
-Open `dev_prompt_library.html` and add a new object to the `prompts` array in the `<script>` section.
+Prompts are stored in the Supabase `prompts` table (schema: [`supabase/schema.sql`](./supabase/schema.sql)), not in the HTML.
+Maintainers add them in the Supabase SQL Editor; contributors can open an issue or PR containing the SQL below and a maintainer will run it.
 
-Copy this template exactly:
-
-```js
-{
-  id: 27,                           // next sequential number — check what the last id is
-  category: "architecture",         // see categories below
-  purpose: ["build", "plan"],       // see purposes below — can be multiple
-  icon: "🧩",                       // one emoji that fits the prompt
-  title: "Your prompt title",       // short, action-oriented — e.g. "Spring Boot API designer"
-  tagLabel: "Architecture",         // matches category, title-cased
-  tagClass: "badge-arch",           // see badge classes below
-  source: "Where you found it",     // your name / Twitter / Instagram handle / "Personal curation"
-  sourceUrl: "https://...",         // link to original source, or "" if original
-  purposeNote: "When and why to use this. Be specific — mention the exact situation.",
-  preview: "One sentence shown on the card before expanding.",
-  text: `The full prompt text here.
-
-Use backtick template literal so line breaks are preserved.
-Put [PLACEHOLDERS] in square brackets where the user pastes their code or input.`
-}
+```sql
+INSERT INTO prompts (title, category, category_slug, purpose, icon, tag_label, tag_class,
+                     source, source_url, purpose_note, preview, prompt_text, chapter, examples)
+VALUES (
+  'Your prompt title',             -- short, action-oriented — e.g. 'Spring Boot API designer'
+  'architecture', 'architecture',  -- category + category_slug (see categories below)
+  '{build,plan}',                  -- purposes (see below) — can be multiple
+  '🧩',                            -- one emoji that fits the prompt
+  'Architecture', 'badge-arch',    -- tag label + badge class (see below)
+  'Where you found it',            -- your name / handle / 'Personal curation'
+  'https://...',                   -- link to original source, or '' if original
+  'When and why to use this. Be specific — mention the exact situation.',
+  'One sentence shown on the card before expanding.',
+  $$The full prompt text here.
+Put [PLACEHOLDERS] in square brackets where the user pastes their code or input.$$,
+  'Original Library',
+  '[{"title": "Example title", "best_for": "The situation this example fits best", "prompt": "The prompt filled in for that situation"}]'
+);
 ```
+
+Use `$$ ... $$` quoting for long text so line breaks and apostrophes are preserved. The site picks up new rows on the next page load — no redeploy needed.
 
 ### Categories
 | Value | Badge class | Use for |
@@ -51,6 +52,10 @@ Put [PLACEHOLDERS] in square brackets where the user pastes their code or input.
 | `career` | `badge-career` | Interview prep, LinkedIn, career planning |
 | `learning` | `badge-learning` | Concept explanations, DSA, mentoring |
 
+Prompt Playbook chapters use their own slugs (`foundation`, `output-control`, … `daily-devops`) with the
+badge classes `badge-foundation`, `badge-reference`, `badge-pro` and `badge-daily`. Category chips on the site
+are built from whatever slugs exist in the table, so a new category needs no code change.
+
 ### Purposes (can assign multiple)
 | Value | When to use |
 |---|---|
@@ -59,16 +64,18 @@ Put [PLACEHOLDERS] in square brackets where the user pastes their code or input.
 | `debug` | Prompt traces and fixes bugs |
 | `learn` | Prompt explains or teaches a concept |
 | `plan` | Prompt designs, architects, or plans before coding |
+| `write` | Prompt drafts docs, emails, updates, or posts |
 | `interview` | Prompt simulates or prepares for interviews |
 
 ---
 
 ## Prompt quality checklist before submitting
 
-- [ ] `id` is the next sequential number (no gaps, no duplicates)
-- [ ] `purposeNote` says *when* to use it, not just *what* it does
-- [ ] `preview` is one sentence, no period at the end
-- [ ] `text` has at least one `[PLACEHOLDER]` where the user pastes their input
+- [ ] The title doesn't duplicate an existing prompt (ids are assigned by the database)
+- [ ] `purpose_note` says *when* to use it, not just *what* it does
+- [ ] `preview` is one sentence
+- [ ] `prompt_text` has at least one `[PLACEHOLDER]` where the user pastes their input
+- [ ] `examples` has 2-3 filled-in examples, each with a `best_for` situation
 - [ ] Source is credited — if you found it on X/Twitter/Instagram, link to the original
 - [ ] You've actually run this prompt and it worked
 
@@ -76,11 +83,10 @@ Put [PLACEHOLDERS] in square brackets where the user pastes their code or input.
 
 ## How to submit
 
-1. Fork this repo
-2. Add your prompt(s) to `dev_prompt_library.html`
-3. Test locally — open the HTML file in a browser and check the card renders correctly
-4. Open a PR with title: `Add: [prompt title]`
-5. In the PR description, paste one example output the prompt produced
+1. Open an issue (or a PR adding a `.sql` file under `supabase/contributions/`) titled `Add: [prompt title]`
+2. Include the `INSERT` statement from above
+3. Paste one example output the prompt produced
+4. A maintainer reviews it, runs it in Supabase, and the card appears on the live site
 
 ---
 
@@ -98,7 +104,8 @@ Open an issue with:
 
 ```
 dev-prompt-library/
-├── index.html                  ← the prompt library (renamed from dev_prompt_library.html)
+├── index.html                  ← the prompt library UI (loads prompts from Supabase)
+├── supabase/schema.sql         ← prompts table, RLS policy, indexes
 ├── frontend-integration.md     ← template output file for the codebase scanner prompt
 ├── README.md
 ├── CONTRIBUTING.md             ← this file
@@ -110,9 +117,9 @@ dev-prompt-library/
 
 ## Code style (for the HTML file)
 
-- Keep all prompts in the `prompts` array — no separate files
+- Prompts belong in the database, not in the HTML
 - Do not change the CSS or JS logic unless fixing a bug
-- Prompt text uses template literals — preserve all line breaks and indentation
+- Every field rendered into the page must go through `escapeHtml`
 - No minification — keep it readable
 
 ---

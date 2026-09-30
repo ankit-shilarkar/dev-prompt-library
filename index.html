@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dev Prompt Library</title>
-<meta name="description" content="Curated AI prompts for software engineers — sourced, categorised, and purpose-labelled.">
+<meta name="description" content="Curated AI prompts for software engineers — sourced, categorised, purpose-labelled, with worked examples.">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f4f0; color: #1a1a1a; min-height: 100vh; }
@@ -24,65 +24,81 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .search-box { width: 100%; padding: 10px 14px; font-size: 14px; border: 1px solid #ddd; border-radius: 10px; background: #fff; outline: none; }
 .search-box:focus { border-color: #1a1a9e; }
 .filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.filter-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; }
-.filter-btn { font-size: 12px; border: 1px solid #ddd; border-radius: 999px; padding: 5px 14px; background: white; color: #555; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.filter-btn:hover { border-color: #aaa; }
-.filter-btn.active { background: #1a1a9e; color: white; border-color: #1a1a9e; }
-.purpose-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.purpose-btn { font-size: 12px; border: 1px solid #ddd; border-radius: 999px; padding: 5px 14px; background: white; color: #555; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.purpose-btn:hover { border-color: #aaa; }
-.purpose-btn.active { background: #0f5c3a; color: white; border-color: #0f5c3a; }
+.filter-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; min-width: 70px; }
+.chip { font-size: 12px; border: 1px solid #ddd; border-radius: 999px; padding: 5px 14px; background: white; color: #555; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.chip:hover { border-color: #aaa; }
+.chip .count { color: #aaa; margin-left: 4px; font-size: 11px; }
+.chip.active .count { color: rgba(255,255,255,0.7); }
+.chip-col.active { background: #7a3e00; color: white; border-color: #7a3e00; }
+.chip-cat.active { background: #1a1a9e; color: white; border-color: #1a1a9e; }
+.chip-purpose.active { background: #0f5c3a; color: white; border-color: #0f5c3a; }
+
+/* ── Credit banner ── */
+.credit { background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #5c4600; margin-bottom: 1.25rem; line-height: 1.5; }
+.credit a { color: #5c4600; font-weight: 600; }
 
 /* ── Stats bar ── */
 .stats-bar { font-size: 13px; color: #888; margin-bottom: 1rem; }
 .stats-bar span { color: #1a1a1a; font-weight: 600; }
 
 /* ── Grid ── */
-.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; align-items: start; }
 
 /* ── Cards ── */
-.prompt-card { background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.prompt-card { background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; min-width: 0; }
 .prompt-card:hover { border-color: #bbb; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
-.prompt-card.expanded { border-color: #1a1a9e; box-shadow: 0 0 0 2px rgba(26,26,158,0.08); }
+.prompt-card.expanded { border-color: #1a1a9e; box-shadow: 0 0 0 2px rgba(26,26,158,0.08); grid-column: 1 / -1; cursor: default; }
 .card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-.card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+.card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; background: #f6f6f2; }
 .card-meta { flex: 1; min-width: 0; }
 .card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin: 0 0 5px; line-height: 1.3; }
 .badge-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
 .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
-.badge-arch    { background: #e8e8fd; color: #534AB7; }
-.badge-quality { background: #FAECE7; color: #993C1D; }
-.badge-devops  { background: #EAF3DE; color: #3B6D11; }
-.badge-frontend{ background: #FAEEDA; color: #854F0B; }
-.badge-career  { background: #FBEAF0; color: #993556; }
-.badge-learning{ background: #E6F1FB; color: #185FA5; }
+.badge-arch     { background: #e8e8fd; color: #534AB7; }
+.badge-quality  { background: #FAECE7; color: #993C1D; }
+.badge-devops   { background: #EAF3DE; color: #3B6D11; }
+.badge-frontend { background: #FAEEDA; color: #854F0B; }
+.badge-career   { background: #FBEAF0; color: #993556; }
+.badge-learning { background: #E6F1FB; color: #185FA5; }
+.badge-foundation { background: #EDE7F6; color: #4527A0; }
+.badge-reference  { background: #E0F2F1; color: #00695C; }
+.badge-pro        { background: #FCE4EC; color: #AD1457; }
+.badge-daily      { background: #FFF3E0; color: #BF360C; }
 .badge-purpose { background: #f0f0f0; color: #555; }
-.badge-source  { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
-.chev { color: #bbb; font-size: 13px; margin-top: 3px; flex-shrink: 0; transition: transform 0.2s; }
+.chev { color: #bbb; font-size: 13px; margin-top: 3px; flex-shrink: 0; transition: transform 0.2s; cursor: pointer; }
 .chev.open { transform: rotate(180deg); }
 .card-preview { font-size: 13px; color: #666; line-height: 1.5; margin-top: 4px; }
 .card-body { margin-top: 12px; border-top: 1px solid #f0f0f0; padding-top: 12px; display: none; }
 .card-body.open { display: block; }
 .purpose-note { font-size: 12px; color: #555; background: #f8f8f4; border-left: 3px solid #1a1a9e; border-radius: 0 6px 6px 0; padding: 8px 12px; margin-bottom: 10px; line-height: 1.5; }
-.prompt-text { font-size: 12px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; color: #1a1a1a; line-height: 1.7; background: #f8f8f6; border-radius: 8px; padding: 12px; white-space: pre-wrap; word-break: break-word; margin-bottom: 10px; border: 1px solid #eee; max-height: 320px; overflow-y: auto; }
+.section-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin: 14px 0 6px; }
+.prompt-text { font-size: 12px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; color: #1a1a1a; line-height: 1.7; background: #f8f8f6; border-radius: 8px; padding: 12px; white-space: pre-wrap; word-break: break-word; margin-bottom: 10px; border: 1px solid #eee; max-height: 360px; overflow-y: auto; }
+.examples { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.example { border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; background: #fcfcfa; min-width: 0; }
+.example-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.example-best { font-size: 12px; color: #0f5c3a; margin-bottom: 8px; line-height: 1.45; }
+.example .prompt-text { max-height: 240px; font-size: 11.5px; margin-bottom: 8px; }
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .action-btn { font-size: 12px; border: 1px solid #ddd; border-radius: 8px; padding: 6px 14px; background: white; color: #444; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.action-btn.small { font-size: 11px; padding: 4px 10px; }
 .action-btn:hover { background: #f5f5f0; border-color: #bbb; }
 .action-btn.copied { color: #0F6E56; border-color: #0F6E56; background: #f0faf6; }
 .source-link { font-size: 11px; color: #888; margin-left: auto; text-decoration: none; }
-.source-link:hover { color: #1a1a9e; text-decoration: underline; }
+a.source-link:hover { color: #1a1a9e; text-decoration: underline; }
 
-/* ── Empty state ── */
-.empty-state { text-align: center; padding: 4rem 2rem; color: #888; }
+/* ── Empty / loading state ── */
+.empty-state { text-align: center; padding: 4rem 2rem; color: #888; grid-column: 1 / -1; }
 .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: #555; }
 
 /* ── Footer ── */
-.site-footer { text-align: center; font-size: 12px; color: #aaa; padding: 2rem; margin-top: 3rem; border-top: 1px solid #e5e5e5; }
+.site-footer { text-align: center; font-size: 12px; color: #999; padding: 2rem; margin-top: 3rem; border-top: 1px solid #e5e5e5; line-height: 1.6; }
+.site-footer a { color: #777; }
 
 @media (max-width: 640px) {
-  .lib-grid { grid-template-columns: 1fr; }
+  .lib-grid, .examples { grid-template-columns: 1fr; }
   .main-wrap { padding: 1rem; }
   .site-header { padding: 1rem; }
+  .filter-label { min-width: 100%; }
 }
 </style>
 </head>
@@ -90,1528 +106,130 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
 <header class="site-header">
   <div class="site-title">🛠️ Dev Prompt Library</div>
-  <span class="site-meta" id="header-count">Loading...</span>
-  <a class="gh-link" href="https://github.com/" target="_blank">
+  <span class="site-meta" id="header-count">Loading…</span>
+  <a class="gh-link" href="https://github.com/ankit-shilarkar/dev-prompt-library" target="_blank" rel="noopener">
     <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
     View on GitHub
   </a>
 </header>
 
 <div class="main-wrap">
+  <div class="credit">
+    📘 Includes patterns from <strong>The Complete Prompt Playbook — 100+ Battle-Tested Patterns for Developers Who Ship</strong>
+    by <a href="https://kunalganglani.com" target="_blank" rel="noopener">Kunal Ganglani · kunalganglani.com</a> (Version 1.0 — March 2026). All credit for those patterns goes to the author.
+  </div>
+
   <div class="controls">
-    <input class="search-box" type="text" id="search-input" placeholder="Search prompts by title, purpose, or keyword..." oninput="renderCards()">
-    <div class="filter-row">
-      <span class="filter-label">Category</span>
-      <button class="filter-btn active" onclick="setFilter('cat','all',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('cat','architecture',this)">Architecture</button>
-      <button class="filter-btn" onclick="setFilter('cat','code-quality',this)">Code quality</button>
-      <button class="filter-btn" onclick="setFilter('cat','devops',this)">DevOps & security</button>
-      <button class="filter-btn" onclick="setFilter('cat','frontend',this)">Frontend</button>
-      <button class="filter-btn" onclick="setFilter('cat','career',this)">Career</button>
-      <button class="filter-btn" onclick="setFilter('cat','learning',this)">Learning</button>
-    </div>
-    <div class="purpose-row">
-      <span class="filter-label">Purpose</span>
-      <button class="purpose-btn active" onclick="setFilter('purpose','all',this)">All</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','build',this)">Build</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','review',this)">Review</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','debug',this)">Debug</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','learn',this)">Learn</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','plan',this)">Plan</button>
-      <button class="purpose-btn" onclick="setFilter('purpose','interview',this)">Interview prep</button>
-    </div>
+    <input class="search-box" type="search" id="search-input" placeholder="Search prompts by title, purpose, keyword, or example…">
+    <div class="filter-row" id="collection-row"></div>
+    <div class="filter-row" id="category-row"></div>
+    <div class="filter-row" id="purpose-row"></div>
   </div>
 
   <div class="stats-bar" id="stats-bar"></div>
-  <div class="lib-grid" id="card-grid"></div>
+  <div class="lib-grid" id="card-grid">
+    <div class="empty-state"><h3>Loading prompts…</h3></div>
+  </div>
 </div>
 
-<footer class="site-footer">
-  Built by Ankit · 27 prompts · Sourced from @itsaiguide, Anthropic docs, X/Twitter community, personal curation · MIT License
+<footer class="site-footer" id="site-footer">
+  Built by Ankit · Sourced from @itsaiguide, Anthropic docs, X/Twitter community, personal curation,
+  and <a href="https://kunalganglani.com" target="_blank" rel="noopener">The Complete Prompt Playbook by Kunal Ganglani</a> · MIT License
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const prompts = [
-
-  /* ══════════════════════════════════════════
-     SOURCE: @itsaiguide (Instagram carousel)
-     ══════════════════════════════════════════ */
-  {
-    id: 1, category: "architecture", purpose: ["build","plan"], icon: "🏗️",
-    title: "Full startup engineering team",
-    tagLabel: "Architecture", tagClass: "badge-arch",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Use this when starting a greenfield project. Gives you architecture, DB schema, file structure, and production-ready scaffold in one shot — great for portfolio project kickoffs.",
-    preview: "Designs complete system architecture with file structure, DB schema, API endpoints, and production-ready code.",
-    text: `Act like a senior full-stack engineer building a production-ready startup MVP from scratch.
-
-First design the complete system architecture, then build the most minimal but scalable version possible.
-
-Include:
-- System architecture
-- File structure
-- Database schema
-- API endpoints
-- UI architecture
-- Production-ready code
-
-Build it like a real startup that could scale to millions of users.`
-  },
-  {
-    id: 2, category: "code-quality", purpose: ["review"], icon: "🔍",
-    title: "Senior codebase auditor",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Paste your Spring Boot service or any module. Gets you honest feedback on architecture, duplicate logic, and scalability risks — exactly what SDE-2 interviewers test you on.",
-    preview: "Reverse-engineers architecture, identifies bad decisions, bottlenecks, and gives refactoring strategies.",
-    text: `Act like a senior engineer who just joined a massive unfamiliar codebase. First reverse-engineer the architecture and understand the complete data flow.
-
-Then identify:
-- Bad architecture decisions
-- Duplicate logic
-- Performance bottlenecks
-- Scalability risks
-- Maintainability issues
-
-Finally provide:
-- A clean architecture breakdown
-- Critical problem areas
-- Refactoring strategies
-- Improved production-grade code
-
-Do not change functionality. Only upgrade the code quality, scalability, and maintainability.`
-  },
-  {
-    id: 3, category: "code-quality", purpose: ["debug"], icon: "🐛",
-    title: "Production debugging monster",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "When something breaks in prod or you can't trace a bug, paste the relevant code + error. Forces root cause analysis instead of trial-and-error guessing.",
-    preview: "Traces root cause of live production issues with edge case analysis and robust fixes.",
-    text: `Act like a senior debugging engineer investigating a live production issue. Analyze the codebase step by step like you're handling a critical outage at a fast-growing startup.
-
-Your job:
-- Understand what the code actually does
-- Trace the real root cause
-- Explain why the failure happens
-- Identify hidden edge cases
-- Propose the most robust fix possible
-
-Finally provide:
-- Code functionality breakdown
-- Root cause analysis
-- Failure explanation
-- Edge case analysis
-- Fixed production-ready code
-
-Do not guess. Think deeply before making changes.`
-  },
-  {
-    id: 4, category: "code-quality", purpose: ["review","build"], icon: "🚀",
-    title: "Performance optimization engineer",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Run this on any service before shipping. Catches N+1 queries, expensive operations, and memory leaks — critical for Java/Spring Boot REST APIs under load.",
-    preview: "Identifies bottlenecks, memory leaks, and prepares code for massive traffic.",
-    text: `Act like a senior performance engineer optimizing a production application used by millions of users.
-
-Your goals:
-- Maximum speed
-- Lower memory usage
-- Better scalability
-- Faster rendering
-- Cleaner execution
-
-Carefully identify:
-- Performance bottlenecks
-- Inefficient logic
-- Unnecessary rendering
-- Expensive operations
-- Memory leaks
-
-Then provide:
-- Performance issue breakdown
-- Optimization strategies
-- Improved production-ready code
-- Scalability recommendations
-
-Optimize the code like you're preparing it for massive traffic.`
-  },
-  {
-    id: 5, category: "architecture", purpose: ["review","build"], icon: "🧹",
-    title: "Clean architecture refactorer",
-    tagLabel: "Architecture", tagClass: "badge-arch",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Perfect for messy Burger Singh codebases you've inherited, or for cleaning up portfolio projects before sharing the GitHub link with recruiters.",
-    preview: "Rebuilds messy code with proper separation of concerns, modularity, and reduced coupling.",
-    text: `Act like a senior software architect rebuilding a messy production codebase using clean architecture principles.
-
-Your mission:
-- Separate concerns properly
-- Increase modularity
-- Reduce tight coupling
-- Improve scalability
-- Make the codebase easier to maintain long term
-
-Do NOT change the product behavior. Only improve the architecture and code quality.
-
-Finally provide:
-- New folder structure
-- Clean architecture breakdown
-- Refactored production-grade code
-- Explanation of architectural improvements
-
-Refactor it like a real senior engineer preparing the codebase to scale.`
-  },
-  {
-    id: 6, category: "architecture", purpose: ["build","plan"], icon: "🖥️",
-    title: "Startup backend architect",
-    tagLabel: "Architecture", tagClass: "badge-arch",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Use this at the start of your life journey visualization app or any Spring Boot project. Gets you caching strategy, API design, and DB schema in one structured output.",
-    preview: "Designs scalable backend with API design, DB schema, caching strategy, and infra.",
-    text: `Act like a senior systems architect designing infrastructure for a high-growth startup.
-
-First design a scalable production-grade system architecture. Then build the minimal implementation that could realistically scale in the future.
-
-Include:
-- System architecture
-- Component structure
-- Data flow
-- API design
-- Database schema
-- Caching strategy
-- Production-ready implementation code
-
-Optimize for scalability, maintainability, and real-world production usage.`
-  },
-  {
-    id: 7, category: "frontend", purpose: ["build"], icon: "🎨",
-    title: "Senior frontend engineer",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Use for building React components in your portfolio projects. Forces proper handling of loading states, empty states, and accessibility — things that set portfolio work apart.",
-    preview: "Builds reusable UI components with loading states, accessibility, and clean developer experience.",
-    text: `Act like a senior frontend engineer building production-grade UI systems for a modern startup.
-
-Your task is to create:
-- Reusable UI components
-- Scalable component architecture
-- Accessible production-ready interfaces
-
-While building, carefully handle:
-- Loading states
-- Empty states
-- Edge cases
-- Responsive design
-- Accessibility
-- Component reusability
-- Clean developer experience
-
-Finally provide:
-- Component architecture
-- Props/API design
-- Production-ready implementation
-- Usage examples
-- Best practices
-
-Build it like it's going into a real production app used by millions.`
-  },
-  {
-    id: 8, category: "architecture", purpose: ["plan","review"], icon: "👑",
-    title: "AI technical lead mode",
-    tagLabel: "Architecture", tagClass: "badge-arch",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Best prompt in the list. Use it before writing any new feature — makes Claude ask hard questions and surface risks you'd miss. Trains you to think at SDE-2 and above.",
-    preview: "Challenges bad decisions, identifies scaling risks, and thinks 5+ years ahead before writing code.",
-    text: `Act like a senior technical lead managing a real engineering team.
-
-Before writing code:
-- Ask clarifying questions
-- Challenge bad decisions
-- Identify scaling risks
-- Suggest better approaches
-- Prioritize simplicity
-
-Think long-term like someone responsible for maintaining this product for 5+ years.
-
-Then provide:
-- Technical decisions
-- Tradeoff analysis
-- Recommended architecture
-- Implementation plan
-- Production-ready solution`
-  },
-  {
-    id: 9, category: "devops", purpose: ["review"], icon: "🔒",
-    title: "Production security audit",
-    tagLabel: "DevOps & security", tagClass: "badge-devops",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Run before any public-facing feature launch. Especially useful for REST APIs — checks JWT handling, input validation, SQL injection, and data exposure.",
-    preview: "Finds vulnerabilities, auth flaws, and injection risks with severity levels and secure fixes.",
-    text: `Act like a senior security engineer auditing a production application.
-
-Carefully inspect the system for:
-- Security vulnerabilities
-- Authentication flaws
-- API weaknesses
-- Injection risks
-- Sensitive data exposure
-- Infrastructure risks
-
-Then provide:
-- Vulnerability report
-- Severity levels
-- Attack scenarios
-- Secure implementation fixes
-- Production-grade recommendations`
-  },
-  {
-    id: 10, category: "devops", purpose: ["build","plan"], icon: "🐳",
-    title: "Senior DevOps & deployment engineer",
-    tagLabel: "DevOps & security", tagClass: "badge-devops",
-    source: "@itsaiguide", sourceUrl: "https://www.instagram.com/itsaiguide",
-    purposeNote: "Use when deploying your portfolio project or setting up Azure pipelines at work. Gets you a full CI/CD + monitoring setup you can actually follow step by step.",
-    preview: "Designs CI/CD pipeline, Docker/K8s setup, monitoring strategy, and full deployment checklist.",
-    text: `Act like a senior DevOps engineer preparing this application for real production deployment.
-
-Your job:
-- Design deployment architecture
-- Configure CI/CD
-- Setup monitoring/logging
-- Improve reliability
-- Reduce downtime risks
-- Optimize scaling
-
-Provide:
-- Infrastructure architecture
-- Deployment workflow
-- CI/CD pipeline
-- Docker/Kubernetes setup
-- Monitoring strategy
-- Production deployment checklist`
-  },
-
-  /* ══════════════════════════════════════════
-     SOURCE: Anthropic Prompt Library
-     https://docs.anthropic.com/en/prompt-library
-     ══════════════════════════════════════════ */
-  {
-    id: 11, category: "code-quality", purpose: ["review","debug"], icon: "🧪",
-    title: "Code explainer & documenter",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "Anthropic Prompt Library", sourceUrl: "https://docs.anthropic.com/en/prompt-library/code-clarifier",
-    purposeNote: "Paste any confusing legacy code — Java, Python, JS. Gets you a plain-English explanation plus inline comments. Useful when inheriting undocumented Burger Singh code.",
-    preview: "Explains what code does in plain English and adds clear inline documentation.",
-    text: `Your task is to take the code snippet provided and explain it in simple, easy-to-understand language. Break down the code's functionality, purpose, and key components. Use analogies, examples, and plain terms to make the explanation accessible to someone with limited coding knowledge. Avoid using technical jargon where possible, and if technical terms are necessary, briefly define them.
-
-After explaining, add clear inline comments to every logical block of the code so the next developer understands it immediately.`
-  },
-  {
-    id: 12, category: "code-quality", purpose: ["build","review"], icon: "🧩",
-    title: "Test case generator",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "Anthropic Prompt Library", sourceUrl: "https://docs.anthropic.com/en/prompt-library/test-case-generator",
-    purposeNote: "Critical for SDE-2 roles. Paste a function or class and get unit + edge case tests. Works well for generating JUnit 5 tests for Spring Boot services.",
-    preview: "Generates comprehensive unit tests including edge cases and boundary conditions.",
-    text: `Your task is to generate a comprehensive set of test cases for the given function or feature. Think through all possible scenarios including:
-- Happy path (expected inputs and outputs)
-- Edge cases (boundary values, empty inputs, max values)
-- Error cases (invalid inputs, null values, exceptions)
-- Integration scenarios where applicable
-
-For each test case provide:
-- Test name (descriptive)
-- Input values
-- Expected output
-- What is being tested and why it matters
-
-Generate the actual test code in the appropriate testing framework (JUnit 5 for Java, pytest for Python, Jest for JS).`
-  },
-  {
-    id: 13, category: "learning", purpose: ["learn"], icon: "📚",
-    title: "Concept deep-dive teacher",
-    tagLabel: "Learning", tagClass: "badge-learning",
-    source: "Anthropic Prompt Library", sourceUrl: "https://docs.anthropic.com/en/prompt-library/concept-explainer",
-    purposeNote: "Use this for any SDE-2 prep topic — Spring Boot internals, JVM memory model, Kafka, Redis, system design patterns. Gets you a first-principles explanation you can actually remember.",
-    preview: "Explains any technical concept from first principles with analogies and progressive depth.",
-    text: `You are a world-class technical teacher. Your task is to explain the following concept to me:
-
-[CONCEPT]
-
-Follow this structure:
-1. One-sentence plain English definition
-2. Why it exists — what problem does it solve?
-3. How it works internally (go deep)
-4. A real-world analogy that makes it click
-5. A concrete code example (use Java/Spring Boot if applicable)
-6. Common mistakes or misconceptions
-7. When to use it vs alternatives
-
-After the explanation, ask me one question to check my understanding.`
-  },
-
-  /* ══════════════════════════════════════════
-     SOURCE: X/Twitter community (widely shared)
-     ══════════════════════════════════════════ */
-  {
-    id: 14, category: "career", purpose: ["interview"], icon: "💼",
-    title: "Mock SDE-2 technical interview",
-    tagLabel: "Career", tagClass: "badge-career",
-    source: "X/Twitter community", sourceUrl: "https://twitter.com",
-    purposeNote: "Your core interview prep tool. Run this weekly. Simulates a real SDE-2 round — DSA problem + system design + behavioural. Gives honest feedback on gaps.",
-    preview: "Runs a realistic SDE-2 interview round with DSA, system design, and behavioural questions.",
-    text: `You are a senior SDE-2 interviewer at a top product company (think Flipkart, Swiggy, Razorpay, or a GCC like Goldman Sachs Tech).
-
-Conduct a 45-minute mock interview for an SDE-2 Java/Spring Boot backend role.
-
-Structure:
-1. Start with a medium DSA problem (arrays/strings/trees). Give me the problem, wait for my approach, hint if I'm stuck.
-2. Move to a system design question (e.g. design a URL shortener, rate limiter, or notification service). Evaluate my HLD and LLD.
-3. Ask 2 behavioural questions using STAR format (e.g. handling a production incident, disagreeing with a tech decision).
-
-After each section:
-- Score me out of 10
-- Tell me exactly what a top candidate would have said or done differently
-- Highlight the specific gap I need to work on
-
-Be honest and direct. Do not be encouraging for the sake of it.`
-  },
-  {
-    id: 15, category: "career", purpose: ["plan"], icon: "🗺️",
-    title: "Career gap analyser",
-    tagLabel: "Career", tagClass: "badge-career",
-    source: "X/Twitter community", sourceUrl: "https://twitter.com",
-    purposeNote: "Paste your current resume/skills and your target JD. Gives you the exact skill gap, what to build, and what to say in interviews to bridge the narrative.",
-    preview: "Compares your current skills to a target JD and gives you a precise gap-closing plan.",
-    text: `You are a senior engineering hiring manager and career coach.
-
-I will give you:
-1. My current experience and skills
-2. A job description for my target SDE-2 role
-
-Your job:
-- Identify the exact skill and experience gaps between me and the JD
-- Rate each gap as Critical / Important / Nice-to-have
-- For each Critical gap: give me the fastest realistic path to close it (course, project, or practice)
-- Tell me how to frame my existing experience in interviews to partially bridge each gap
-- Suggest 3 portfolio project ideas that would directly address the most critical gaps
-
-Be specific. No generic advice.
-
-My current experience:
-[PASTE YOUR SKILLS/RESUME SUMMARY]
-
-Target JD:
-[PASTE JD]`
-  },
-  {
-    id: 16, category: "career", purpose: ["plan","interview"], icon: "📝",
-    title: "LinkedIn profile SDE-2 optimiser",
-    tagLabel: "Career", tagClass: "badge-career",
-    source: "X/Twitter community", sourceUrl: "https://twitter.com",
-    purposeNote: "Directly useful for your inactive LinkedIn. Paste your current About + experience bullets and get rewritten versions that attract SDE-2 HR shortlisting and recruiter searches.",
-    preview: "Rewrites your LinkedIn profile to attract SDE-2 shortlisting and recruiter searches.",
-    text: `You are a technical recruiter and LinkedIn growth expert specialising in software engineering roles in India.
-
-I will give you my current LinkedIn About section and experience bullets.
-
-Your job:
-- Rewrite my About section to clearly signal SDE-2 readiness (max 300 characters for the preview, 2000 for full)
-- Rewrite each experience bullet using the formula: [Action verb] + [What I did] + [Technology used] + [Measurable impact]
-- Suggest 10 skills I should add to pass ATS filters for Java/Spring Boot SDE-2 roles
-- Write a headline that balances current title with aspirational positioning
-- Give me 3 post ideas I can publish this week to signal active engagement
-
-My current LinkedIn:
-[PASTE YOUR ABOUT + EXPERIENCE]`
-  },
-
-  /* ══════════════════════════════════════════
-     SOURCE: Personal curation (Ankit)
-     ══════════════════════════════════════════ */
-  {
-    id: 17, category: "architecture", purpose: ["plan","build"], icon: "🗄️",
-    title: "Spring Boot API designer",
-    tagLabel: "Architecture", tagClass: "badge-arch",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Your go-to for starting any new Spring Boot service. Gets you a complete REST API design with proper layering (Controller → Service → Repository), DTOs, and exception handling.",
-    preview: "Designs a complete Spring Boot REST API with layering, DTOs, validation, and exception handling.",
-    text: `Act like a senior Java backend engineer at a product company.
-
-Design a complete Spring Boot REST API for the following feature:
-[DESCRIBE YOUR FEATURE]
-
-Include:
-- Controller layer (REST endpoints, request/response DTOs)
-- Service layer (business logic, validations)
-- Repository layer (JPA/MongoDB queries)
-- Exception handling (custom exceptions + @ControllerAdvice)
-- Input validation (@Valid, @NotNull, etc.)
-- API response structure (standard success/error format)
-- Swagger/OpenAPI annotations
-
-Follow:
-- RESTful naming conventions
-- Single Responsibility Principle per class
-- Clean separation of concerns
-
-Output the full code for each layer, not just snippets.`
-  },
-  {
-    id: 18, category: "learning", purpose: ["learn","interview"], icon: "🧠",
-    title: "DSA problem mentor",
-    tagLabel: "Learning", tagClass: "badge-learning",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Use this instead of just reading LeetCode solutions. Forces you to think first, then guides you to the optimal approach with complexity analysis — builds real interview muscle memory.",
-    preview: "Guides you through a DSA problem with hints, patterns, and optimal Java solution.",
-    text: `You are a competitive programming coach helping me prepare for SDE-2 interviews.
-
-I will give you a DSA problem. Do the following:
-
-Step 1 — Ask me for my initial approach first. Wait for my response.
-Step 2 — Evaluate my approach. Tell me what's right, what's wrong, and give ONE hint if I'm stuck. Do not give the answer.
-Step 3 — After I attempt again, reveal the optimal approach and explain:
-  - The pattern/technique used (sliding window, two pointers, DP, etc.)
-  - Why this pattern fits this problem
-  - Time and space complexity with proof
-  - The clean Java solution with comments
-  - 2 similar problems to practice next
-
-Problem:
-[PASTE LEETCODE PROBLEM]`
-  },
-  {
-    id: 19, category: "devops", purpose: ["plan","build"], icon: "☁️",
-    title: "Azure Functions migration planner",
-    tagLabel: "DevOps & security", tagClass: "badge-devops",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Directly useful at Burger Singh. Use when migrating Python Azure Functions to Java Spring Boot, or evaluating whether a function should be a microservice instead.",
-    preview: "Plans migration of Azure Functions to Java Spring Boot with risk assessment and rollout strategy.",
-    text: `You are a senior cloud architect experienced with Azure and Java Spring Boot migrations.
-
-I have an existing Azure Function (Python/JavaScript) that I want to migrate to a Java Spring Boot microservice.
-
-Analyze and provide:
-1. Should this even be migrated? (When Azure Functions are better vs Spring Boot)
-2. Migration architecture plan
-   - How to replicate triggers (HTTP/Timer/Queue) in Spring Boot
-   - Equivalent Azure SDK calls in Java
-   - Environment variable and config management
-3. Step-by-step migration plan with effort estimates
-4. Risk areas and how to mitigate them
-5. Testing strategy for the migrated service
-6. Deployment approach (containerised vs Azure App Service)
-
-Function details:
-[PASTE YOUR FUNCTION CODE + TRIGGER TYPE]`
-  },
-  {
-    id: 20, category: "code-quality", purpose: ["review","build"], icon: "🔄",
-    title: "Code review like a senior engineer",
-    tagLabel: "Code quality", tagClass: "badge-quality",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Paste your PR diff before pushing. Gets you honest feedback on naming, edge cases, SOLID principles, and what a reviewer at a product company would flag.",
-    preview: "Reviews your code like a senior engineer — naming, design, edge cases, and SOLID principles.",
-    text: `You are a senior software engineer doing a thorough code review for a PR.
-
-Review the following code as if it were going into a production system at a high-growth startup.
-
-For each issue found, provide:
-- Issue description (what and where)
-- Severity: Critical / High / Medium / Low
-- Why it's a problem
-- The corrected code snippet
-
-Also evaluate:
-- Naming clarity (variables, methods, classes)
-- SOLID principle violations
-- Missing null checks or error handling
-- Potential concurrency issues
-- Test coverage gaps
-- Any security concerns
-
-End with:
-- Overall rating: Not ready / Needs work / Approve with comments / LGTM
-- Top 3 things done well
-- Top 3 things to fix before merge
-
-Code to review:
-[PASTE YOUR CODE]`
-  },
-
-  /* ══════════════════════════════════════════
-     FRONTEND — Review, Debug, Learn, Plan, Interview Prep
-     ══════════════════════════════════════════ */
-  {
-    id: 21, category: "frontend", purpose: ["review"], icon: "🖼️",
-    title: "Frontend code reviewer",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Run before any UI PR. Catches accessibility gaps, redundant re-renders, prop drilling, missing error states, and CSS specificity issues that slip past normal review.",
-    preview: "Reviews React/JS code for accessibility, performance, component design, and production readiness.",
-    text: `You are a senior frontend engineer doing a thorough code review.
-
-Review the following frontend code (React / HTML / CSS / JS) as if it goes into a production app with real users.
-
-Evaluate and flag issues in these areas:
-
-1. Component design
-   - Single responsibility violations
-   - Prop drilling that should be context or state management
-   - Missing prop types / TypeScript types
-   - Reusability problems
-
-2. Performance
-   - Unnecessary re-renders (missing useMemo, useCallback, React.memo)
-   - Heavy operations inside render
-   - Missing lazy loading for routes or heavy components
-   - Image optimisation issues
-
-3. Accessibility (a11y)
-   - Missing alt text, aria-labels, roles
-   - Non-keyboard-navigable interactive elements
-   - Poor color contrast or focus indicators
-
-4. UX completeness
-   - Missing loading state
-   - Missing empty state
-   - Missing error state
-   - No feedback on user actions
-
-5. CSS / Styling
-   - Hardcoded values that should be variables/tokens
-   - Specificity conflicts
-   - Non-responsive units
-
-For each issue: location → severity (Critical/High/Medium/Low) → why it matters → corrected code.
-
-End with: Top 3 strengths, Top 3 must-fix before merge, overall verdict.
-
-Code to review:
-[PASTE YOUR FRONTEND CODE]`
-  },
-  {
-    id: 22, category: "frontend", purpose: ["debug"], icon: "🕵️",
-    title: "Frontend bug detective",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Use when a UI bug is hard to reproduce or the root cause isn't obvious — layout breaks, race conditions, state inconsistencies, or API-to-UI data mismatches.",
-    preview: "Systematically traces frontend bugs — rendering, state, network, or layout — to root cause.",
-    text: `You are a senior frontend engineer debugging a production UI issue.
-
-I will describe the bug and share relevant code. Your job is to trace it systematically — do not guess.
-
-Step 1 — Understand the symptom
-Ask me these if I haven't provided them:
-- What does the user see vs what should happen?
-- Does it happen always or intermittently?
-- Which browser / device?
-- Any console errors or network errors?
-
-Step 2 — Categorise the bug type
-Determine if this is:
-- A React state / lifecycle issue (stale closure, missing dependency, wrong update order)
-- A CSS / layout issue (specificity, flexbox/grid misuse, z-index)
-- An async / race condition (useEffect firing order, Promise chains)
-- An API integration issue (wrong field mapping, missing null check)
-- A routing / navigation issue
-
-Step 3 — Trace root cause
-Walk through the code line by line. Identify the exact line or pattern causing the issue. Explain WHY it causes the symptom.
-
-Step 4 — Fix
-Provide the corrected code with comments explaining what changed and why.
-
-Step 5 — Prevention
-Tell me what pattern or habit would prevent this class of bug in future.
-
-Bug description + code:
-[DESCRIBE BUG + PASTE RELEVANT CODE]`
-  },
-  {
-    id: 23, category: "frontend", purpose: ["learn"], icon: "📖",
-    title: "Frontend concept teacher",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Use this for any React / JS / CSS concept you're shaky on — useEffect, closures, CSS Grid, event delegation, Virtual DOM, etc. Gets you a deep explanation with a working example you can run.",
-    preview: "Teaches any frontend concept from first principles with analogy, deep explanation, and live example.",
-    text: `You are a world-class frontend teacher. Your student is a backend developer learning frontend properly.
-
-Teach me the following concept in depth:
-[CONCEPT — e.g. React useEffect, CSS Flexbox, JS Closures, Event Delegation]
-
-Structure:
-1. One-sentence plain English definition
-2. Why this concept exists — what problem does it solve?
-3. How it works internally (go deep — don't oversimplify)
-4. A real-world analogy that makes it stick
-5. A minimal but complete working code example I can run in a browser or CodeSandbox
-6. The most common mistakes developers make with this concept
-7. When to use it vs the alternative approaches
-8. One gotcha that trips up even experienced developers
-
-After the explanation, give me a small exercise to test my understanding. Wait for my attempt before revealing the answer.`
-  },
-  {
-    id: 24, category: "frontend", purpose: ["plan"], icon: "📐",
-    title: "Frontend architecture planner",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Use at the start of any new frontend feature or project. Gets you folder structure, state management strategy, component hierarchy, and API integration plan before writing a single line of code.",
-    preview: "Plans complete frontend architecture — component tree, state strategy, routing, and API integration.",
-    text: `You are a senior frontend architect planning a new React application feature.
-
-I will describe what I need to build. Plan the complete frontend architecture before any code is written.
-
-Provide:
-
-1. Component hierarchy
-   - List all components needed (container vs presentational)
-   - Show the parent-child tree structure
-   - Identify which components are reusable
-
-2. State management plan
-   - What lives in local state (useState)?
-   - What needs global state (Context / Redux / Zustand)?
-   - What is server state (React Query / SWR)?
-   - Where does each piece of state live and why?
-
-3. Routing plan
-   - List of routes and their components
-   - Protected routes if any
-   - Lazy-loaded routes for performance
-
-4. API integration plan
-   - List of API endpoints needed
-   - Request/response shape for each
-   - Loading, success, and error handling strategy
-   - Where API calls happen (which component or hook)
-
-5. Folder structure
-   - Show the recommended file and folder layout
-
-6. Potential complexity risks
-   - What's the hardest part to get right?
-   - What decisions will be difficult to reverse?
-
-Feature to plan:
-[DESCRIBE YOUR FEATURE OR SCREEN]`
-  },
-  {
-    id: 25, category: "frontend", purpose: ["interview"], icon: "🎯",
-    title: "Frontend SDE-2 mock interview",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Run this when preparing for any role that has a frontend round — even backend-heavy SDE-2 roles often test React basics and JS fundamentals. Covers the questions most candidates blank on.",
-    preview: "Runs a realistic frontend interview round covering JS fundamentals, React, CSS, and system design.",
-    text: `You are a senior frontend interviewer at a product company (Razorpay / Swiggy / Zepto level).
-
-Conduct a focused 30-minute frontend interview for a developer who is primarily a backend engineer but needs to demonstrate solid frontend competency for an SDE-2 role.
-
-Cover these areas in order:
-
-Round 1 — JavaScript fundamentals (10 min)
-- Ask 2 conceptual questions (closures, event loop, promises, prototype chain, this keyword)
-- Give 1 small code snippet to predict the output. Wait for my answer before revealing.
-
-Round 2 — React (10 min)
-- Ask 2 conceptual questions (Virtual DOM, reconciliation, useEffect deps, rendering behaviour)
-- Give 1 debugging challenge — show broken React code, ask me to find and fix the issue
-
-Round 3 — CSS + browser (5 min)
-- 1 CSS layout question (flexbox or grid)
-- 1 browser/performance question (repaint vs reflow, lazy loading, critical rendering path)
-
-Round 4 — Frontend system design (5 min)
-- Design a frontend for one of: infinite scroll feed, multi-step form, real-time notification system
-
-After each answer:
-- Score me 1-10
-- Tell me what the ideal answer looks like
-- Flag what I should study if I got it wrong
-
-Be direct and honest.`
-  },
-
-
-  /* ══════════════════════════════════════════
-     SPECIAL: Full Monorepo Scanner → frontend-integration.md
-     React + Expo (web + Android + iOS) monorepo.
-     Uses sub-agents. Requires /graphify output + README.
-     ══════════════════════════════════════════ */
-  {
-    id: 26, category: "frontend", purpose: ["plan"], icon: "📋",
-    title: "Monorepo scanner → frontend-integration.md",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Run inside Claude Code on your franchise app monorepo. Spawns 4 sub-agents in parallel — backend scanner, existing frontend scanner, config scanner, and graphify analyser — then synthesises all findings into a single frontend-integration.md. Hand the .md to your fresher PM → he feeds it to his LLM → generates compatible UI. Zero rework goal.",
-    preview: "Launches 4 sub-agents to scan the full React+Expo monorepo and produces a complete .md LLM context file for compatible UI generation.",
-    text: `You are a principal engineer performing a full technical audit of a React + Expo monorepo (web + Android + iOS).
-
-Your output is a single file: frontend-integration.md
-A fresher PM will feed this file to an AI to generate a new compatible frontend UI.
-Goal: zero rework when the developer plugs in the new UI.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 1 — READ THESE FIRST (ground truth)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Before launching any sub-agent, read completely:
-1. README.md — extract: project name, purpose, tech stack, architecture notes, conventions
-2. The /graphify output — extract: module map, dependency relationships, core files, API client location, nav root
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 2 — LAUNCH 4 SUB-AGENTS IN PARALLEL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Spawn these simultaneously. Each returns a structured JSON report.
-
-── SUB-AGENT A: Backend Scanner ──────────────────────────
-
-Scan all backend source files. Return:
-
-{
-  "framework": { "name": "", "version": "" },
-  "database": { "name": "", "type": "SQL|NoSQL", "orm": "" },
-  "auth": {
-    "library": "",
-    "mechanism": "JWT|session|OAuth",
-    "token_field_name": "",
-    "token_header_format": "Authorization: Bearer {token}",
-    "storage_key": "",
-    "expiry": "",
-    "refresh_endpoint": "",
-    "logout_endpoint": ""
-  },
-  "roles": [{ "name": "", "permissions": [] }],
-  "cors": { "allowed_origins": [], "allowed_methods": [], "allowed_headers": [] },
-  "rate_limiting": "",
-  "env_vars_used": [{ "name": "", "purpose": "" }],
-  "routes": [
-    {
-      "method": "GET|POST|PUT|PATCH|DELETE",
-      "path": "",
-      "auth_required": true,
-      "required_role": "",
-      "middleware": [],
-      "controller": "",
-      "request_body": [{ "field": "", "type": "", "required": true, "validation": "" }],
-      "query_params": [{ "param": "", "type": "", "required": false, "description": "" }],
-      "url_params": [{ "param": "", "type": "" }],
-      "success_response": {},
-      "error_codes": [{ "code": 0, "when": "", "message": "" }],
-      "side_effects": ""
-    }
-  ],
-  "models": [
-    {
-      "name": "",
-      "fields": [{ "name": "", "type": "", "required": true, "default": "", "constraints": "", "note": "" }],
-      "relationships": [],
-      "indexes": []
-    }
-  ],
-  "error_response_shape": {},
-  "file_uploads": [{ "endpoint": "", "field_name": "", "accepted_types": [], "max_size": "" }]
-}
-
-── SUB-AGENT B: Existing Frontend Scanner ────────────────
-
-Scan all frontend/mobile source files (screens, components, navigation, hooks, services, store). Return:
-
-{
-  "expo": {
-    "sdk_version": "",
-    "app_name": "",
-    "bundle_id": "",
-    "scheme": "",
-    "permissions": [],
-    "plugins": []
-  },
-  "navigation": {
-    "library": "",
-    "version": "",
-    "root_file": "",
-    "structure": "tree of navigator → screens"
-  },
-  "state_management": { "library": "", "store_file": "", "slices": [] },
-  "api_client": {
-    "file": "",
-    "library": "",
-    "base_url_var": "",
-    "interceptors": []
-  },
-  "auth_flow": {
-    "login_screen": "",
-    "token_storage_method": "AsyncStorage|SecureStore|localStorage",
-    "token_storage_key": "",
-    "protected_route_guard": "",
-    "logout_flow": ""
-  },
-  "component_library": { "name": "", "version": "" },
-  "screens": [
-    {
-      "name": "",
-      "file": "",
-      "route": "",
-      "platform": "all|web|ios|android",
-      "api_calls": [{ "method": "", "endpoint": "" }],
-      "state_accessed": [],
-      "components_used": [],
-      "fields_displayed": [],
-      "user_actions": [],
-      "known_issues": ""
-    }
-  ],
-  "shared_components": [
-    {
-      "name": "",
-      "file": "",
-      "purpose": "",
-      "props": [{ "name": "", "type": "", "required": true, "default": "", "description": "" }],
-      "platform_notes": ""
-    }
-  ],
-  "platform_variants": [{ "file": "", "platforms": [], "difference": "" }],
-  "hardcoded_values": [{ "file": "", "value": "", "should_be": "" }],
-  "integration_issues": [{ "screen": "", "issue": "", "backend_expects": "", "frontend_sends": "" }]
-}
-
-── SUB-AGENT C: Config & Infrastructure Scanner ──────────
-
-Scan: package.json, tsconfig.json, babel.config.js, metro.config.js, app.json, app.config.js, .env.example, any constants files. Return:
-
-{
-  "dependencies": {
-    "navigation": [{ "package": "", "version": "" }],
-    "ui": [{ "package": "", "version": "" }],
-    "state": [{ "package": "", "version": "" }],
-    "network": [{ "package": "", "version": "" }],
-    "auth": [{ "package": "", "version": "" }],
-    "utils": [{ "package": "", "version": "" }]
-  },
-  "path_aliases": [{ "alias": "", "resolves_to": "" }],
-  "env_vars": [{ "name": "", "purpose": "", "example_value": "" }],
-  "metro_custom_config": "",
-  "babel_plugins": [],
-  "expo_config": {
-    "platforms": [],
-    "deep_link_scheme": "",
-    "permissions": [],
-    "build_scripts": {}
-  }
-}
-
-── SUB-AGENT D: Graphify Architecture Analyser ───────────
-
-Analyse the /graphify output. Return:
-
-{
-  "core_modules": [{ "file": "", "imported_by_count": 0, "purpose": "" }],
-  "api_client_file": "",
-  "auth_state_file": "",
-  "root_navigator_file": "",
-  "circular_dependencies": [],
-  "orphan_files": [],
-  "module_clusters": [{ "cluster_name": "", "files": [], "responsibility": "" }],
-  "dependency_flow": "plain English description of how data flows from API → state → screens"
-}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 3 — SYNTHESISE INTO frontend-integration.md
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Merge all 4 sub-agent reports + README + graphify into the document below.
-Copy exact strings from code — never paraphrase field names, paths, enum values, or package names.
-Output ONLY the markdown. Start directly at the first # heading. No preamble.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT DOCUMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-# Frontend Integration Specification
-> Generated from: README + /graphify output + backend scan + frontend scan + config scan.
-> **How to use this file:** Give the entire file to your AI. Say: "Read this spec fully. Now build [screen name] that integrates with this backend."
-> **Most important section:** Section 11 (Hard Constraints). Read it before touching any field name, enum, or API call.
-
----
-
-## 1. Project Overview
-- **App name:**
-- **What it does:** (2-3 sentences from README)
-- **Platforms:** Web + Android + iOS (React + Expo monorepo)
-- **End users:**
-- **Stage:** MVP / Beta / Production
-
----
-
-## 2. Tech Stack
-
-### Backend
-| Layer | Technology | Version |
-|---|---|---|
-| Language | | |
-| Framework | | |
-| Database | | |
-| ORM / Query layer | | |
-| Auth library | | |
-| Hosting | | |
-
-### Frontend (existing codebase)
-| Layer | Technology | Version |
-|---|---|---|
-| Framework | React Native + Expo | |
-| Expo SDK | | |
-| Navigation | | |
-| State management | | |
-| Component library | | |
-| HTTP client | | |
-| Language | TypeScript / JavaScript | |
-
-### All Dependencies (from package.json — exact versions)
-Group by: Navigation / UI / State / Network / Auth / Utils / Dev
-
----
-
-## 3. Project Structure & Architecture
-
-Folder tree (meaningful directories only — from graphify + file scan):
-\`\`\`
-/
-├── [backend folder]/
-│   ├── routes/
-│   ├── controllers/
-│   ├── models/
-│   └── middleware/
-├── [frontend/src folder]/
-│   ├── screens/
-│   ├── components/
-│   ├── navigation/      ← root navigator: [exact file]
-│   ├── hooks/
-│   ├── services/        ← API client: [exact file]
-│   └── store/           ← global state: [exact file]
-├── app.json
-├── package.json
-└── README.md
-\`\`\`
-
-**Data flow (from graphify):** [plain English — how API response travels to screen]
-**Core modules (most depended on):** [file → purpose]
-**Orphan files found:** [list — may be safe to delete]
-
----
-
-## 4. Authentication & Authorization
-
-### End-to-end auth flow
-1. User submits login → \`[METHOD] [endpoint]\`
-2. Backend returns → token in field \`[exact field name]\`
-3. Frontend stores token in → \`[AsyncStorage|SecureStore|localStorage]\` under key \`"[exact key string]"\`
-4. Every protected request sends → \`Authorization: Bearer {token}\` in header
-5. On 401 → [what happens: redirect to login / refresh / logout]
-
-### Login endpoint
-- **\`[METHOD] [/exact/path]\`**
-- Request body:
-  | Field (exact) | Type | Required | Validation |
-  |---|---|---|---|
-  | | | | |
-- Success response:
-  \`\`\`json
-  { }
-  \`\`\`
-- Token field name: \`[exact string]\`
-- Token expiry: [if found]
-
-### Roles & access
-| Role (exact string) | What they can access |
-|---|---|
-| | |
-
-### Protected screens (require auth token)
-[List every screen that checks auth before rendering]
-
----
-
-## 5. All API Endpoints
-
-[One block per endpoint, exactly as below]
-
-### \`[METHOD]\` /exact/path
-- **Purpose:**
-- **Auth:** Public / Bearer token / Role: \`[exact string]\`
-- **Request body:**
-  | Field (exact) | Type | Required | Validation | Example |
-  |---|---|---|---|---|
-  | | | | | |
-- **Query/URL params:**
-  | Param (exact) | Type | Required | Description |
-  |---|---|---|---|
-  | | | | |
-- **Success response:**
-  \`\`\`json
-  { }
-  \`\`\`
-- **Response fields:**
-  | Field | Type | Nullable | Meaning |
-  |---|---|---|---|
-  | | | | |
-- **Error codes:**
-  | Code | When | Show user |
-  |---|---|---|
-  | | | |
-- **Currently called from:** [existing frontend file path]
-- **Integration issues:** [mismatch found between frontend and backend, if any]
-
----
-
-## 6. Data Models
-
-### [ModelName]
-| Field (exact) | Type | Required | Default | Constraints | Plain English |
-|---|---|---|---|---|---|
-| | | | | | |
-
-**Relationships:** [e.g. franchise\_id → Franchise.\_id]
-**Indexes:** [indexed fields]
-
----
-
-## 7. Navigation Structure
-
-\`\`\`
-Root Navigator                    [file: exact path]
-├── Auth Stack (unauthenticated)
-│   ├── Login                    [file: exact path]
-│   └── Register                 [file: exact path]
-└── App Stack (authenticated)
-    ├── Tab Navigator
-    │   ├── Home                 [file: exact path]
-    │   └── Profile              [file: exact path]
-    └── [other screens]          [file: exact path]
-\`\`\`
-
-- **Deep link scheme:** \`[from app.json]\`
-- **Web routes (if Expo Router):** [list file-based routes]
-- **Android back behaviour:** [any custom back handler found]
-
----
-
-## 8. All Screens
-
-### [Screen Name]
-- **File:** [exact path / "NEW — to be built"]
-- **Route name / path:** [exact string used in navigator]
-- **Platforms:** All / Web only / Mobile only
-- **Purpose:** what user does here
-- **API calls:** [method + exact endpoint for each]
-- **State accessed:** [global state keys + local state vars]
-- **Components rendered:** [list]
-- **Fields displayed:** [exact API field names]
-- **User actions:**
-  | Action | API called | Result |
-  |---|---|---|
-  | Tap "Submit" | POST /api/... | Navigate to ... |
-- **States to handle:**
-  - Loading: [what to show]
-  - Empty: [what to show]
-  - Error: [what to show]
-- **Current issues:** [broken behaviour or API mismatch if existing screen]
-
----
-
-## 9. Forms & Validations
-
-### [Form Name]
-- **Submission endpoint:** \`[METHOD] [/exact/path]\`
-- **On success:** [navigate to / show toast / refresh]
-- **On error:** [how to display API error details]
-
-| Field (exact API name) | Label for user | Input type | Required | Min | Max | Format | Error message |
-|---|---|---|---|---|---|---|---|
-| | | | | | | | |
-
----
-
-## 10. Shared Components (Reuse These — Do Not Rebuild)
-
-### [ComponentName]
-- **File:** [exact path]
-- **Purpose:**
-- **Props:**
-  | Prop | Type | Required | Default | Description |
-  |---|---|---|---|---|
-  | | | | | |
-- **Platform notes:** [any web vs mobile difference]
-
----
-
-## 11. Hard Constraints — DO NOT DEVIATE
-
-**These are locked by the codebase. Any deviation breaks integration or requires a developer to fix it.**
-
-### API field names — copy exactly, do not rename
-\`\`\`
-[list every field name sent from frontend to backend]
-\`\`\`
-
-### Enum values — exact case, exact string
-| Field | Allowed values (copy exactly as strings) |
-|---|---|
-| status | "active", "inactive" |
-| [field] | "[value1]", "[value2]" |
-
-### Date & time
-- API returns dates as: [ISO 8601 / Unix timestamp — from code]
-- API expects dates as: [same format]
-- Show to users as: [DD/MM/YYYY or locale format]
-
-### Required headers on every authenticated request
-\`\`\`
-Authorization: Bearer {token}
-Content-Type: application/json
-\`\`\`
-
-### Import path aliases (use in all new files)
-| Alias | Resolves to |
-|---|---|
-| @components | [path] |
-| @screens | [path] |
-| [others] | [paths] |
-
-### Expo / React Native — do not change these
-- Expo SDK version: [exact — do not upgrade without developer]
-- React Native version: [exact]
-- Permissions in app.json: [list — new permissions require a native rebuild]
-- Deep link scheme: \`[exact string]\` — used by navigation, cannot change
-
-### Platform-specific files — maintain variants
-| File | Platforms | What differs |
-|---|---|---|
-| [filename].web.js | Web | [difference] |
-| [filename].android.js | Android | [difference] |
-
-### File uploads
-| Field name (exact) | Accepted types | Max size | Endpoint |
-|---|---|---|---|
-| | | | |
-
-### Environment variables (.env)
-| Variable | Purpose | Example |
-|---|---|---|
-| EXPO\_PUBLIC\_API\_URL | Base URL for all API calls | http://localhost:8000 |
-| [others] | | |
-
----
-
-## 12. Error Handling Contract
-
-### Standard error response shape
-\`\`\`json
-{
-  "success": false,
-  "error": {
-    "code": "ERROR_CODE",
-    "message": "Human readable",
-    "details": { "field_name": "field error" }
-  }
-}
-\`\`\`
-
-### How to display each error
-| HTTP Code | When | UI treatment |
-|---|---|---|
-| 400 | Validation failed | Show \`error.details[field]\` below each input |
-| 401 | Not logged in / token expired | Clear token → navigate to Login screen |
-| 403 | No permission | Toast: "You don't have access to this" |
-| 404 | Not found | Inline: "Not found" on screen |
-| 409 | Conflict / duplicate | Toast with \`error.message\` |
-| 500 | Server crash | Toast: "Something went wrong. Please try again." |
-| Network error | No internet | Banner: "No internet connection" |
-
----
-
-## 13. Known Integration Issues (Fix These Before Building New UI)
-
-Found by comparing existing frontend code vs backend:
-
-| Screen / File | Issue | Backend expects | Frontend currently sends | Fix |
-|---|---|---|---|---|
-| | | | | |
-
----
-
-## 14. What the New UI Must Preserve
-
-The PM must not remove or redesign these — they are functionally required:
-
-- [Navigation flows that deeplinks depend on]
-- [Specific component behaviours tied to business logic]
-- [Platform-specific UX differences between web and mobile]
-- [Any animation or gesture tied to a state change]
-
----
-
-## 15. Glossary
-
-Definitions for every technical and business term in this codebase. Written for someone with zero prior knowledge.
-
-| Term | Plain English meaning |
-|---|---|
-| API | A way for the app screen to talk to the server. Like a waiter taking your order to the kitchen and bringing food back. |
-| Endpoint | A specific URL the app calls — like a specific counter at a bank. |
-| JWT / Token | A secret code given after login. Must be sent with every request to prove the user is logged in. |
-| Expo | A toolkit that runs one React codebase on web, Android, and iOS at the same time. |
-| AsyncStorage | A mini database stored on the phone itself. Used to remember the login token between app restarts. |
-| React Navigation | The library that controls which screen the user sees and how they move between screens. |
-| State | Data the app holds in memory while it is open. Lost when the app closes unless saved to storage. |
-| enum | A field that only accepts specific exact text values. Must match exactly — even the capitalisation matters. |
-| null / undefined | A field with no value. The UI must handle this gracefully — show a dash or placeholder, never crash. |
-| Monorepo | One folder containing both the backend server code and the frontend app code. |
-| [domain term] | [plain English meaning specific to this app] |
-
----
-
-*End of frontend-integration.md*
-*Sources: README.md + /graphify output + Sub-Agent A (backend) + Sub-Agent B (frontend) + Sub-Agent C (config) + Sub-Agent D (architecture)*
-*Do not manually edit Sections 5, 6, 11 — re-run the scanner if the codebase changes*`
-  },
-
-  /* ══════════════════════════════════════════
-     FEATURE DISCOVERY: New page/module before any design or code
-     ══════════════════════════════════════════ */
-  {
-    id: 27, category: "frontend", purpose: ["plan"], icon: "🔎",
-    title: "Feature discovery session → spec doc",
-    tagLabel: "Frontend", tagClass: "badge-frontend",
-    source: "Personal curation", sourceUrl: "",
-    purposeNote: "Run this BEFORE any design or dev starts on a new screen or module. Takes what the PM gave you (requirements + user flow) and forces out everything missing — scope, edge cases, API status, tech constraints, open questions, and risks. Output is a feature-discovery.md to share with PM and designer so everyone is aligned before a single frame is drawn or line written.",
-    preview: "Structured discovery session that fills every gap between PM requirements and what actually needs to be built and designed.",
-    text: `You are a senior product engineer running a feature discovery session before any design or development starts.
-
-Your job: ask me the right questions, then produce a complete feature discovery document that aligns the developer, PM, and designer on exactly what will be built — and what won't.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PHASE 1 — ASK ME THESE QUESTIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Ask each group one at a time. Wait for my answers before moving to the next group.
-
-GROUP A — Basics
-1. What is the feature / module name?
-2. What problem does it solve? (Who has the pain, and what goes away when this exists?)
-3. Who are the users? (franchise owner / admin / customer / staff / all)
-4. Which platforms must it work on? (web / Android / iOS / all)
-
-GROUP B — Requirements (what PM gave you)
-5. Paste the PM's requirements exactly as written.
-6. Paste the user flow if provided (steps the user takes). If not provided, say so.
-7. How do we know this feature succeeded? (What changes — a number, a behaviour, a complaint that stops)
-
-GROUP C — Tech stack and constraints
-8. Frontend stack? (React Native + Expo / React web / both / other)
-9. Backend stack? (Node/Express / Python/FastAPI / Java/Spring Boot / other)
-10. Database? (MongoDB / PostgreSQL / MySQL / other)
-11. Authentication? (JWT / session / OAuth / already implemented / not needed)
-12. State management? (useState+Context / Redux / Zustand / React Query / not decided)
-13. Any hard technical constraints — things already decided that cannot change?
-
-GROUP D — Scope
-14. What is definitely IN scope for v1? (must-haves — feature isn't done without these)
-15. What is explicitly OUT of scope for v1? (parking these for later)
-16. Which edge cases must be handled? (empty state / loading / API error / no internet / permission denied / session expired / long content)
-17. Are there any role or permission rules? (who can see / edit / delete on this screen)
-
-GROUP E — Data and API
-18. What data must be shown on screen? (list every field the user sees)
-19. Does the API for this already exist? (fully built / partial / needs building / not sure)
-20. Any API notes? (endpoint URL if known, or what needs to be built)
-21. Must this work offline? (yes / no / partial — show cached, refresh on connect)
-
-GROUP F — Design and UX
-22. Is there an existing design or Figma for this? (ready / wireframes only / not yet / PM is designing now)
-23. Is there an existing screen in the app to reference for layout and patterns?
-24. Which existing components in the codebase should be reused — not rebuilt?
-25. Any specific UX requirements? (accessibility, one-handed use, dark mode, screen size)
-
-GROUP G — Open questions and risks
-26. What is still unclear or undecided? (questions that need answers before dev starts)
-27. What could slow this down or go wrong? (API not ready / design not final / third-party dependency / etc.)
-28. What does this feature depend on? (other features, teams, or decisions it is blocked by)
-29. Is there a deadline or timeline?
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PHASE 2 — ANALYSE AND CHALLENGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-After I answer all questions, do the following before writing the document:
-
-1. Identify gaps — what critical information is still missing that would block dev or design from starting?
-2. Challenge the scope — is v1 too big? What could be cut to ship faster?
-3. Flag tech risks — given the stack I described, what is technically difficult or impossible?
-4. Surface hidden complexity — what looks simple in the requirements but is actually hard to build?
-5. Clarify ambiguities — list any requirements that could be interpreted in more than one way.
-
-Tell me these findings and ask for clarification on any blockers before proceeding to Phase 3.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PHASE 3 — PRODUCE THE DOCUMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Once all gaps are resolved, output this document exactly:
-
----
-
-# Feature Discovery Document
-## [Feature Name]
-> Share this with PM, designer, and dev team before any design or code starts.
-> Nothing moves forward until every item in the checklist (Section 9) is ticked.
-
----
-
-## 1. What we are building
-
-**Feature name:**
-**Problem being solved:**
-**Users:**
-**Platforms:**
-
----
-
-## 2. Requirements (from PM — verbatim)
-
-[Paste PM's requirements exactly]
-
-**User flow:**
-[Step by step]
-
-**Success metric:**
-[How we know this worked]
-
----
-
-## 3. Tech stack
-
-| Layer | Decision |
-|---|---|
-| Frontend | |
-| Backend | |
-| Database | |
-| Auth | |
-| State management | |
-
-**Hard constraints (cannot change):**
-
----
-
-## 4. Scope
-
-### In scope — v1
-[Must-haves]
-
-### Out of scope — v1 (explicitly parked, not forgotten)
-[Parking lot]
-
-### Edge cases to handle
-[List every state the UI must handle]
-
-### Permissions and roles
-[Who can see / do what]
-
----
-
-## 5. Data and API
-
-**Data displayed on screen:**
-[Every field the user sees — use exact API field names if known]
-
-**API status:** [exists / partial / needs building]
-
-**API notes:**
-[Endpoint, what's missing, what needs building]
-
-**Offline support:** [yes / no / partial]
-
----
-
-## 6. Design and UX
-
-**Design status:** [Figma ready / wireframes / not started]
-
-**Reference screen:** [existing screen to match for patterns]
-
-**Existing components to reuse (do not rebuild):**
-[List components]
-
-**UX requirements:**
-[Accessibility, platform specifics, special interactions]
-
----
-
-## 7. Open questions — must be answered before dev starts
-
-| # | Question | Owner | Status |
-|---|---|---|---|
-| 1 | [question] | PM / Dev / Design | Open |
-
----
-
-## 8. Risks and blockers
-
-| Risk | Impact | Mitigation |
-|---|---|---|
-| [risk] | High / Medium / Low | [how to handle] |
-
-**Dependencies (blocked by):**
-**Timeline:**
-
----
-
-## 9. Checklist — nothing moves until all are ticked
-
-- [ ] PM has reviewed and signed off on scope
-- [ ] All open questions in Section 7 have answers
-- [ ] API status confirmed — existing or build plan agreed with backend dev
-- [ ] Design exists for all in-scope screens including all edge case states
-- [ ] Edge cases from Section 4 are covered in the design
-- [ ] Existing components identified — no duplicate builds planned
-- [ ] Tech stack constraints shared with PM and designer
-- [ ] frontend-integration.md updated if new API endpoints are added
-
----
-
-*Generated by feature discovery session*
-*Next: update frontend-integration.md if new API endpoints are needed, then share with designer*`
-  }
+const SUPABASE_URL = 'https://npqnunamefcptmmozuxj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_9PQubkBh3qortx9xGgE20A_-BricY1j';
+
+const PLAYBOOK_SOURCE = 'Kunal Ganglani — The Complete Prompt Playbook';
+
+const COLLECTIONS = [
+  { id: 'all', label: 'All' },
+  { id: 'original', label: 'Original library' },
+  { id: 'playbook', label: 'Prompt Playbook' },
 ];
 
-/* ── State ── */
+const PURPOSES = [
+  ['all', 'All'], ['build', 'Build'], ['review', 'Review'], ['debug', 'Debug'],
+  ['learn', 'Learn'], ['plan', 'Plan'], ['write', 'Write'], ['interview', 'Interview prep'],
+];
+
+let prompts = [];
+let activeCol = 'all';
 let activeCat = 'all';
 let activePurpose = 'all';
+const openCards = new Set();
 
-function setFilter(type, val, btn) {
-  if (type === 'cat') {
-    activeCat = val;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  } else {
-    activePurpose = val;
-    document.querySelectorAll('.purpose-btn').forEach(b => b.classList.remove('active'));
+const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+const collectionOf = p => p.source === PLAYBOOK_SOURCE ? 'playbook' : 'original';
+
+async function loadPrompts() {
+  const grid = document.getElementById('card-grid');
+  try {
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await client
+      .from('prompts')
+      .select('id,title,category,category_slug,purpose,icon,tag_label,tag_class,source,source_url,purpose_note,preview,prompt_text,chapter,examples')
+      .order('id', { ascending: true });
+    if (error) throw error;
+    prompts = data.map(p => ({ ...p, examples: Array.isArray(p.examples) ? p.examples : [], purpose: p.purpose || [] }));
+    renderFilters();
+    renderCards();
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<div class="empty-state"><h3>Could not load prompts</h3><p>The database is unreachable right now. Please refresh in a moment.</p></div>';
+    document.getElementById('header-count').textContent = '';
   }
-  btn.classList.add('active');
-  renderCards();
+}
+
+function chip(kind, id, label, active, count) {
+  const countHtml = count === undefined ? '' : `<span class="count">${count}</span>`;
+  return `<button class="chip chip-${kind}${active ? ' active' : ''}" data-kind="${kind}" data-id="${escapeHtml(id)}">${escapeHtml(label)}${countHtml}</button>`;
+}
+
+function renderFilters() {
+  const colCounts = { all: prompts.length, original: 0, playbook: 0 };
+  prompts.forEach(p => colCounts[collectionOf(p)]++);
+  document.getElementById('collection-row').innerHTML =
+    '<span class="filter-label">Collection</span>' +
+    COLLECTIONS.map(c => chip('col', c.id, c.label, activeCol === c.id, colCounts[c.id])).join('');
+
+  const inCol = prompts.filter(p => activeCol === 'all' || collectionOf(p) === activeCol);
+  const cats = new Map();
+  inCol.forEach(p => {
+    const c = cats.get(p.category_slug) || { label: p.tag_label, count: 0 };
+    c.count++;
+    cats.set(p.category_slug, c);
+  });
+  if (activeCat !== 'all' && !cats.has(activeCat)) activeCat = 'all';
+  document.getElementById('category-row').innerHTML =
+    '<span class="filter-label">Category</span>' +
+    chip('cat', 'all', 'All', activeCat === 'all') +
+    [...cats].map(([slug, c]) => chip('cat', slug, c.label, activeCat === slug, c.count)).join('');
+
+  document.getElementById('purpose-row').innerHTML =
+    '<span class="filter-label">Purpose</span>' +
+    PURPOSES.map(([id, label]) => chip('purpose', id, label, activePurpose === id)).join('');
+}
+
+function matches(p, q) {
+  if (!q) return true;
+  const hay = [p.title, p.preview, p.purpose_note, p.source, p.chapter, p.tag_label, p.prompt_text,
+    ...p.examples.map(e => `${e.title} ${e.best_for}`)].join(' ').toLowerCase();
+  return q.split(/\s+/).every(term => hay.includes(term));
 }
 
 function renderCards() {
   const q = document.getElementById('search-input').value.toLowerCase().trim();
   const grid = document.getElementById('card-grid');
 
-  const filtered = prompts.filter(p => {
-    const catOk = activeCat === 'all' || p.category === activeCat;
-    const purposeOk = activePurpose === 'all' || p.purpose.includes(activePurpose);
-    const searchOk = !q || p.title.toLowerCase().includes(q) || p.preview.toLowerCase().includes(q) || p.purposeNote.toLowerCase().includes(q) || p.source.toLowerCase().includes(q);
-    return catOk && purposeOk && searchOk;
-  });
+  const filtered = prompts.filter(p =>
+    (activeCol === 'all' || collectionOf(p) === activeCol) &&
+    (activeCat === 'all' || p.category_slug === activeCat) &&
+    (activePurpose === 'all' || p.purpose.includes(activePurpose)) &&
+    matches(p, q));
 
   document.getElementById('stats-bar').innerHTML = `Showing <span>${filtered.length}</span> of <span>${prompts.length}</span> prompts`;
   document.getElementById('header-count').textContent = `${prompts.length} prompts`;
@@ -1621,73 +239,110 @@ function renderCards() {
     return;
   }
 
-  grid.innerHTML = filtered.map(p => {
-    const purposeBadges = p.purpose.map(pu => `<span class="badge badge-purpose">${pu}</span>`).join('');
-    const sourceHtml = p.sourceUrl
-      ? `<a class="source-link" href="${p.sourceUrl}" target="_blank" onclick="event.stopPropagation()">↗ ${p.source}</a>`
-      : `<span class="source-link">${p.source}</span>`;
-    return `
-    <div class="prompt-card" id="card-${p.id}" onclick="toggleCard(${p.id})">
+  grid.innerHTML = filtered.map(renderCard).join('');
+}
+
+function renderCard(p) {
+  const isOpen = openCards.has(p.id);
+  const purposeBadges = p.purpose.map(pu => `<span class="badge badge-purpose">${escapeHtml(pu)}</span>`).join('');
+  const url = safeUrl(p.source_url);
+  const sourceHtml = url
+    ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener">↗ ${escapeHtml(p.source)}</a>`
+    : `<span class="source-link">${escapeHtml(p.source)}</span>`;
+  const examplesHtml = p.examples.length ? `
+        <div class="section-label">Examples · ${p.examples.length}</div>
+        <div class="examples">
+          ${p.examples.map((ex, i) => `
+          <div class="example">
+            <div class="example-title">${escapeHtml(ex.title)}</div>
+            ${ex.best_for ? `<div class="example-best">✅ <strong>Best for:</strong> ${escapeHtml(ex.best_for)}</div>` : ''}
+            <pre class="prompt-text">${escapeHtml(ex.prompt)}</pre>
+            <button class="action-btn small" data-copy="${p.id}" data-example="${i}">📋 Copy example</button>
+          </div>`).join('')}
+        </div>` : '';
+  return `
+    <div class="prompt-card${isOpen ? ' expanded' : ''}" data-card="${p.id}">
       <div class="card-header">
-        <div class="card-icon">${p.icon}</div>
+        <div class="card-icon">${escapeHtml(p.icon)}</div>
         <div class="card-meta">
-          <p class="card-title">${p.title}</p>
+          <p class="card-title">${escapeHtml(p.title)}</p>
           <div class="badge-row">
-            <span class="badge ${p.tagClass}">${p.tagLabel}</span>
+            <span class="badge ${escapeHtml(p.tag_class)}">${escapeHtml(p.tag_label)}</span>
             ${purposeBadges}
           </div>
         </div>
-        <span class="chev" id="chev-${p.id}">▾</span>
+        <span class="chev${isOpen ? ' open' : ''}">▾</span>
       </div>
-      <p class="card-preview">${p.preview}</p>
-      <div class="card-body" id="body-${p.id}">
-        <div class="purpose-note">💡 <strong>When to use:</strong> ${p.purposeNote}</div>
-        <pre class="prompt-text">${p.text}</pre>
+      <p class="card-preview">${escapeHtml(p.preview)}</p>
+      <div class="card-body${isOpen ? ' open' : ''}">
+        <div class="purpose-note">💡 <strong>When to use:</strong> ${escapeHtml(p.purpose_note)}</div>
+        <div class="section-label">Prompt template</div>
+        <pre class="prompt-text">${escapeHtml(p.prompt_text)}</pre>
         <div class="btn-row">
-          <button class="action-btn" id="copy-${p.id}" onclick="copyPrompt(event, ${p.id})">📋 Copy prompt</button>
+          <button class="action-btn" data-copy="${p.id}">📋 Copy prompt</button>
           ${sourceHtml}
         </div>
+        ${examplesHtml}
       </div>
     </div>`;
-  }).join('');
 }
 
-function toggleCard(id) {
-  const body = document.getElementById('body-' + id);
-  const card = document.getElementById('card-' + id);
-  const chev = document.getElementById('chev-' + id);
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  card.classList.toggle('expanded', !isOpen);
-  chev.classList.toggle('open', !isOpen);
+function flash(btn) {
+  const original = btn.textContent;
+  btn.classList.add('copied');
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 2000);
 }
 
-function copyPrompt(e, id) {
-  e.stopPropagation();
-  const p = prompts.find(x => x.id === id);
-  navigator.clipboard.writeText(p.text).then(() => {
-    const btn = document.getElementById('copy-' + id);
-    btn.classList.add('copied');
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.textContent = '📋 Copy prompt';
-    }, 2000);
-  }).catch(() => {
+async function copyText(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
     const ta = document.createElement('textarea');
-    ta.value = p.text;
+    ta.value = text;
     document.body.appendChild(ta);
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    const btn = document.getElementById('copy-' + id);
-    btn.classList.add('copied');
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copy prompt'; }, 2000);
-  });
+  }
+  flash(btn);
 }
 
-renderCards();
+document.addEventListener('click', e => {
+  const chipBtn = e.target.closest('.chip');
+  if (chipBtn) {
+    const { kind, id } = chipBtn.dataset;
+    if (kind === 'col') { activeCol = id; activeCat = 'all'; }
+    if (kind === 'cat') activeCat = id;
+    if (kind === 'purpose') activePurpose = id;
+    renderFilters();
+    renderCards();
+    return;
+  }
+
+  const copyBtn = e.target.closest('[data-copy]');
+  if (copyBtn) {
+    const p = prompts.find(x => x.id === Number(copyBtn.dataset.copy));
+    const ex = copyBtn.dataset.example;
+    copyText(ex === undefined ? p.prompt_text : p.examples[Number(ex)].prompt, copyBtn);
+    return;
+  }
+
+  if (e.target.closest('a, pre')) return;
+  const card = e.target.closest('.prompt-card');
+  if (!card) return;
+  const expanded = card.classList.contains('expanded');
+  if (expanded && !e.target.closest('.card-header')) return;
+  const id = Number(card.dataset.card);
+  expanded ? openCards.delete(id) : openCards.add(id);
+  card.classList.toggle('expanded', !expanded);
+  card.querySelector('.card-body').classList.toggle('open', !expanded);
+  card.querySelector('.chev').classList.toggle('open', !expanded);
+});
+
+document.getElementById('search-input').addEventListener('input', renderCards);
+
+loadPrompts();
 </script>
 </body>
 </html>

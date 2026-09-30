@@ -3,7 +3,7 @@
 > A curated, source-attributed collection of AI prompts for software engineers.
 > Every prompt is categorised, purpose-labelled, and comes with a "when to use" note.
 
-**Live site →** [your-username.github.io/dev-prompt-library](https://your-username.github.io/dev-prompt-library)
+**Live site →** [ankit-shilarkar.github.io/dev-prompt-library](https://ankit-shilarkar.github.io/dev-prompt-library)
 
 ---
 
@@ -21,16 +21,33 @@ Every prompt here has been run and tested. Each card tells you:
 
 ## What's inside
 
-**27 prompts** across 6 categories, sourced and attributed:
+**124 prompts** in two collections, sourced and attributed:
 
 | Source | Prompts |
 |---|---|
+| [The Complete Prompt Playbook](https://kunalganglani.com) by Kunal Ganglani | 97 |
 | [@itsaiguide](https://www.instagram.com/itsaiguide) (Instagram) | 10 |
 | [Anthropic Prompt Library](https://docs.anthropic.com/en/prompt-library) | 3 |
 | X/Twitter community | 3 |
-| Personal curation | 10 |
+| Personal curation | 11 |
 
-### Categories
+### Prompt Playbook collection
+
+All 97 patterns from **The Complete Prompt Playbook — 100+ Battle-Tested Patterns for Developers Who Ship**
+by **Kunal Ganglani | [kunalganglani.com](https://kunalganglani.com)**, Version 1.0 — March 2026.
+All credit for these patterns goes to the author ("Share freely. Attribution appreciated.").
+
+Every pattern has its template, a "when to use" note (the book's Use when / Skip when / Pro tip), and
+**3 worked examples** — the book's own example plus two more — each with a **Best for** line.
+
+| Section | Chapters |
+|---|---|
+| Foundation | Foundation Patterns · Output Control · Reasoning & Accuracy · Agentic Patterns |
+| Reference | Developer Workflow · Data & Analysis · Safety & Defense · Model-Specific Cheat Sheet |
+| Pro Patterns | Anti-Hallucination · Output Quality Multipliers · Speed & Architecture · Production Hardening · Advanced Reasoning · Advanced Generation |
+| Daily Use | Daily Coding · Daily Writing · Daily Research & Decisions · Daily DevOps |
+
+### Original library categories
 
 | Category | What's in it |
 |---|---|
@@ -54,10 +71,11 @@ The `.md` is a complete LLM context document — a PM or designer feeds it to an
 
 ## Features
 
-- 🔍 Search by title, keyword, or "when to use" note
-- 🏷️ Filter by category and purpose
+- 🔍 Search by title, keyword, "when to use" note, or example
+- 🏷️ Filter by collection, category, and purpose
 - 💡 Situation-specific "when to use" on every prompt
-- 📋 One-click copy to clipboard
+- 🧪 Worked examples with "Best for" guidance on every Playbook pattern
+- 📋 One-click copy for prompts and examples
 - ↗ Source attribution with links
 - 📱 Mobile responsive
 
@@ -70,29 +88,37 @@ The `.md` is a complete LLM context document — a PM or designer feeds it to an
 3. Source: `main` branch, `/ (root)`
 4. Live at: `https://<your-username>.github.io/dev-prompt-library`
 
-No build step. No dependencies. Pure HTML.
+No build step. The page is a single HTML file; prompts are loaded at runtime from Supabase.
+
+---
+
+## Database (Supabase)
+
+Prompts live in the `prompts` table of the Supabase project `dev-prompt-library`
+(`https://npqnunamefcptmmozuxj.supabase.co`). The schema is in [`supabase/schema.sql`](./supabase/schema.sql).
+
+- Row Level Security is on; the public (anon) role can only **read**.
+- The key in `index.html` is the **publishable** key, which is safe to ship in a public page.
+- Add or edit prompts in the Supabase dashboard (Table Editor or SQL Editor) — the site picks them up on the next page load, no redeploy needed.
 
 ---
 
 ## How to add a prompt
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide. Quick version:
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide. Quick version (Supabase SQL Editor):
 
-```js
-{
-  id: 27,
-  category: "architecture",
-  purpose: ["build", "plan"],
-  icon: "🧩",
-  title: "Your prompt title",
-  tagLabel: "Architecture",
-  tagClass: "badge-arch",
-  source: "Your name or original source",
-  sourceUrl: "https://link-to-original",
-  purposeNote: "Use this when [specific situation]. Gets you [specific output].",
-  preview: "One-line description shown on the card.",
-  text: `Full prompt. Put [PLACEHOLDERS] where user pastes input.`
-}
+```sql
+INSERT INTO prompts (title, category, category_slug, purpose, icon, tag_label, tag_class,
+                     source, source_url, purpose_note, preview, prompt_text, chapter, examples)
+VALUES (
+  'Your prompt title', 'architecture', 'architecture', '{build,plan}', '🧩',
+  'Architecture', 'badge-arch', 'Your name or original source', 'https://link-to-original',
+  'Use this when [specific situation]. Gets you [specific output].',
+  'One-line description shown on the card.',
+  'Full prompt. Put [PLACEHOLDERS] where user pastes input.',
+  'Original Library',
+  '[{"title": "Example", "best_for": "When this is the right tool", "prompt": "Filled-in prompt"}]'
+);
 ```
 
 ---
@@ -101,7 +127,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide. Quick version:
 
 ```
 dev-prompt-library/
-├── index.html                  ← full prompt library (self-contained, zero dependencies)
+├── index.html                  ← the prompt library UI (loads prompts from Supabase)
+├── supabase/schema.sql         ← prompts table, RLS policy, indexes
 ├── frontend-integration.md     ← template output for the monorepo scanner prompt
 ├── README.md
 ├── CONTRIBUTING.md
@@ -124,7 +151,7 @@ dev-prompt-library/
 
 ## License
 
-MIT — use freely, attribution appreciated.
+MIT — use freely, attribution appreciated. Prompt Playbook patterns © Kunal Ganglani, shared with attribution.
 
 ---
 
