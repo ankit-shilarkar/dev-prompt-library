@@ -3,346 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Prompt Library</title>
-<meta name="description" content="Curated AI prompts for software engineers — sourced, categorised, purpose-labelled, with worked examples.">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f4f0; color: #1a1a1a; min-height: 100vh; }
-
-/* ── Header ── */
-.site-header { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; position: sticky; top: 0; z-index: 10; }
-.site-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.site-meta { font-size: 12px; color: #888; }
-.gh-link { font-size: 12px; background: #1a1a1a; color: #fff; border-radius: 6px; padding: 5px 12px; text-decoration: none; display: flex; align-items: center; gap: 6px; }
-.gh-link:hover { background: #333; }
-
-/* ── Layout ── */
-.main-wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
-
-/* ── Search + Filters ── */
-.controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 1.75rem; }
-.search-box { width: 100%; padding: 10px 14px; font-size: 14px; border: 1px solid #ddd; border-radius: 10px; background: #fff; outline: none; }
-.search-box:focus { border-color: #1a1a9e; }
-.filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.filter-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; min-width: 70px; }
-.chip { font-size: 12px; border: 1px solid #ddd; border-radius: 999px; padding: 5px 14px; background: white; color: #555; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.chip:hover { border-color: #aaa; }
-.chip .count { color: #aaa; margin-left: 4px; font-size: 11px; }
-.chip.active .count { color: rgba(255,255,255,0.7); }
-.chip-col.active { background: #7a3e00; color: white; border-color: #7a3e00; }
-.chip-cat.active { background: #1a1a9e; color: white; border-color: #1a1a9e; }
-.chip-purpose.active { background: #0f5c3a; color: white; border-color: #0f5c3a; }
-
-/* ── Credit banner ── */
-.credit { background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #5c4600; margin-bottom: 1.25rem; line-height: 1.5; }
-.credit a { color: #5c4600; font-weight: 600; }
-
-/* ── Stats bar ── */
-.stats-bar { font-size: 13px; color: #888; margin-bottom: 1rem; }
-.stats-bar span { color: #1a1a1a; font-weight: 600; }
-
-/* ── Grid ── */
-.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; align-items: start; }
-
-/* ── Cards ── */
-.prompt-card { background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; min-width: 0; }
-.prompt-card:hover { border-color: #bbb; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
-.prompt-card.expanded { border-color: #1a1a9e; box-shadow: 0 0 0 2px rgba(26,26,158,0.08); grid-column: 1 / -1; cursor: default; }
-.card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-.card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; background: #f6f6f2; }
-.card-meta { flex: 1; min-width: 0; }
-.card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin: 0 0 5px; line-height: 1.3; }
-.badge-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
-.badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
-.badge-arch     { background: #e8e8fd; color: #534AB7; }
-.badge-quality  { background: #FAECE7; color: #993C1D; }
-.badge-devops   { background: #EAF3DE; color: #3B6D11; }
-.badge-frontend { background: #FAEEDA; color: #854F0B; }
-.badge-career   { background: #FBEAF0; color: #993556; }
-.badge-learning { background: #E6F1FB; color: #185FA5; }
-.badge-foundation { background: #EDE7F6; color: #4527A0; }
-.badge-reference  { background: #E0F2F1; color: #00695C; }
-.badge-pro        { background: #FCE4EC; color: #AD1457; }
-.badge-daily      { background: #FFF3E0; color: #BF360C; }
-.badge-purpose { background: #f0f0f0; color: #555; }
-.chev { color: #bbb; font-size: 13px; margin-top: 3px; flex-shrink: 0; transition: transform 0.2s; cursor: pointer; }
-.chev.open { transform: rotate(180deg); }
-.card-preview { font-size: 13px; color: #666; line-height: 1.5; margin-top: 4px; }
-.card-body { margin-top: 12px; border-top: 1px solid #f0f0f0; padding-top: 12px; display: none; }
-.card-body.open { display: block; }
-.purpose-note { font-size: 12px; color: #555; background: #f8f8f4; border-left: 3px solid #1a1a9e; border-radius: 0 6px 6px 0; padding: 8px 12px; margin-bottom: 10px; line-height: 1.5; }
-.section-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin: 14px 0 6px; }
-.prompt-text { font-size: 12px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; color: #1a1a1a; line-height: 1.7; background: #f8f8f6; border-radius: 8px; padding: 12px; white-space: pre-wrap; word-break: break-word; margin-bottom: 10px; border: 1px solid #eee; max-height: 360px; overflow-y: auto; }
-.examples { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
-.example { border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; background: #fcfcfa; min-width: 0; }
-.example-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.example-best { font-size: 12px; color: #0f5c3a; margin-bottom: 8px; line-height: 1.45; }
-.example .prompt-text { max-height: 240px; font-size: 11.5px; margin-bottom: 8px; }
-.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.action-btn { font-size: 12px; border: 1px solid #ddd; border-radius: 8px; padding: 6px 14px; background: white; color: #444; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.15s; }
-.action-btn.small { font-size: 11px; padding: 4px 10px; }
-.action-btn:hover { background: #f5f5f0; border-color: #bbb; }
-.action-btn.copied { color: #0F6E56; border-color: #0F6E56; background: #f0faf6; }
-.source-link { font-size: 11px; color: #888; margin-left: auto; text-decoration: none; }
-a.source-link:hover { color: #1a1a9e; text-decoration: underline; }
-
-/* ── Empty / loading state ── */
-.empty-state { text-align: center; padding: 4rem 2rem; color: #888; grid-column: 1 / -1; }
-.empty-state h3 { font-size: 16px; margin-bottom: 8px; color: #555; }
-
-/* ── Footer ── */
-.site-footer { text-align: center; font-size: 12px; color: #999; padding: 2rem; margin-top: 3rem; border-top: 1px solid #e5e5e5; line-height: 1.6; }
-.site-footer a { color: #777; }
-
-@media (max-width: 640px) {
-  .lib-grid, .examples { grid-template-columns: 1fr; }
-  .main-wrap { padding: 1rem; }
-  .site-header { padding: 1rem; }
-  .filter-label { min-width: 100%; }
-}
-</style>
+<title>Dev Prompt Library — learn to build with AI</title>
+<meta name="description" content="A gamified roadmap and prompt library that teaches college students to work with AI hand-in-hand: attempt first, pair with AI, reflect, and become job-ready.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="assets/js/home.js"></script>
 </head>
 <body>
+<header id="site-header"></header>
 
-<header class="site-header">
-  <div class="site-title">🛠️ Dev Prompt Library</div>
-  <span class="site-meta" id="header-count">Loading…</span>
-  <a class="gh-link" href="https://github.com/ankit-shilarkar/dev-prompt-library" target="_blank" rel="noopener">
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-    View on GitHub
-  </a>
-</header>
-
-<div class="main-wrap">
-  <div class="credit">
-    📘 Includes patterns from <strong>The Complete Prompt Playbook — 100+ Battle-Tested Patterns for Developers Who Ship</strong>
-    by <a href="https://kunalganglani.com" target="_blank" rel="noopener">Kunal Ganglani · kunalganglani.com</a> (Version 1.0 — March 2026). All credit for those patterns goes to the author.
-  </div>
-
-  <div class="controls">
-    <input class="search-box" type="search" id="search-input" placeholder="Search prompts by title, purpose, keyword, or example…">
-    <div class="filter-row" id="collection-row"></div>
-    <div class="filter-row" id="category-row"></div>
-    <div class="filter-row" id="purpose-row"></div>
-  </div>
-
-  <div class="stats-bar" id="stats-bar"></div>
-  <div class="lib-grid" id="card-grid">
-    <div class="empty-state"><h3>Loading prompts…</h3></div>
-  </div>
-</div>
-
-<footer class="site-footer" id="site-footer">
-  Built by Ankit · Sourced from @itsaiguide, Anthropic docs, X/Twitter community, personal curation,
-  and <a href="https://kunalganglani.com" target="_blank" rel="noopener">The Complete Prompt Playbook by Kunal Ganglani</a> · MIT License
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = 'https://npqnunamefcptmmozuxj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_9PQubkBh3qortx9xGgE20A_-BricY1j';
-
-const PLAYBOOK_SOURCE = 'Kunal Ganglani — The Complete Prompt Playbook';
-
-const COLLECTIONS = [
-  { id: 'all', label: 'All' },
-  { id: 'original', label: 'Original library' },
-  { id: 'playbook', label: 'Prompt Playbook' },
-];
-
-const PURPOSES = [
-  ['all', 'All'], ['build', 'Build'], ['review', 'Review'], ['debug', 'Debug'],
-  ['learn', 'Learn'], ['plan', 'Plan'], ['write', 'Write'], ['interview', 'Interview prep'],
-];
-
-let prompts = [];
-let activeCol = 'all';
-let activeCat = 'all';
-let activePurpose = 'all';
-const openCards = new Set();
-
-const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
-const collectionOf = p => p.source === PLAYBOOK_SOURCE ? 'playbook' : 'original';
-
-async function loadPrompts() {
-  const grid = document.getElementById('card-grid');
-  try {
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    const { data, error } = await client
-      .from('prompts')
-      .select('id,title,category,category_slug,purpose,icon,tag_label,tag_class,source,source_url,purpose_note,preview,prompt_text,chapter,examples')
-      .order('id', { ascending: true });
-    if (error) throw error;
-    prompts = data.map(p => ({ ...p, examples: Array.isArray(p.examples) ? p.examples : [], purpose: p.purpose || [] }));
-    renderFilters();
-    renderCards();
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = '<div class="empty-state"><h3>Could not load prompts</h3><p>The database is unreachable right now. Please refresh in a moment.</p></div>';
-    document.getElementById('header-count').textContent = '';
-  }
-}
-
-function chip(kind, id, label, active, count) {
-  const countHtml = count === undefined ? '' : `<span class="count">${count}</span>`;
-  return `<button class="chip chip-${kind}${active ? ' active' : ''}" data-kind="${kind}" data-id="${escapeHtml(id)}">${escapeHtml(label)}${countHtml}</button>`;
-}
-
-function renderFilters() {
-  const colCounts = { all: prompts.length, original: 0, playbook: 0 };
-  prompts.forEach(p => colCounts[collectionOf(p)]++);
-  document.getElementById('collection-row').innerHTML =
-    '<span class="filter-label">Collection</span>' +
-    COLLECTIONS.map(c => chip('col', c.id, c.label, activeCol === c.id, colCounts[c.id])).join('');
-
-  const inCol = prompts.filter(p => activeCol === 'all' || collectionOf(p) === activeCol);
-  const cats = new Map();
-  inCol.forEach(p => {
-    const c = cats.get(p.category_slug) || { label: p.tag_label, count: 0 };
-    c.count++;
-    cats.set(p.category_slug, c);
-  });
-  if (activeCat !== 'all' && !cats.has(activeCat)) activeCat = 'all';
-  document.getElementById('category-row').innerHTML =
-    '<span class="filter-label">Category</span>' +
-    chip('cat', 'all', 'All', activeCat === 'all') +
-    [...cats].map(([slug, c]) => chip('cat', slug, c.label, activeCat === slug, c.count)).join('');
-
-  document.getElementById('purpose-row').innerHTML =
-    '<span class="filter-label">Purpose</span>' +
-    PURPOSES.map(([id, label]) => chip('purpose', id, label, activePurpose === id)).join('');
-}
-
-function matches(p, q) {
-  if (!q) return true;
-  const hay = [p.title, p.preview, p.purpose_note, p.source, p.chapter, p.tag_label, p.prompt_text,
-    ...p.examples.map(e => `${e.title} ${e.best_for}`)].join(' ').toLowerCase();
-  return q.split(/\s+/).every(term => hay.includes(term));
-}
-
-function renderCards() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
-  const grid = document.getElementById('card-grid');
-
-  const filtered = prompts.filter(p =>
-    (activeCol === 'all' || collectionOf(p) === activeCol) &&
-    (activeCat === 'all' || p.category_slug === activeCat) &&
-    (activePurpose === 'all' || p.purpose.includes(activePurpose)) &&
-    matches(p, q));
-
-  document.getElementById('stats-bar').innerHTML = `Showing <span>${filtered.length}</span> of <span>${prompts.length}</span> prompts`;
-  document.getElementById('header-count').textContent = `${prompts.length} prompts`;
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><h3>No prompts match your filters</h3><p>Try clearing the search or changing a filter.</p></div>';
-    return;
-  }
-
-  grid.innerHTML = filtered.map(renderCard).join('');
-}
-
-function renderCard(p) {
-  const isOpen = openCards.has(p.id);
-  const purposeBadges = p.purpose.map(pu => `<span class="badge badge-purpose">${escapeHtml(pu)}</span>`).join('');
-  const url = safeUrl(p.source_url);
-  const sourceHtml = url
-    ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener">↗ ${escapeHtml(p.source)}</a>`
-    : `<span class="source-link">${escapeHtml(p.source)}</span>`;
-  const examplesHtml = p.examples.length ? `
-        <div class="section-label">Examples · ${p.examples.length}</div>
-        <div class="examples">
-          ${p.examples.map((ex, i) => `
-          <div class="example">
-            <div class="example-title">${escapeHtml(ex.title)}</div>
-            ${ex.best_for ? `<div class="example-best">✅ <strong>Best for:</strong> ${escapeHtml(ex.best_for)}</div>` : ''}
-            <pre class="prompt-text">${escapeHtml(ex.prompt)}</pre>
-            <button class="action-btn small" data-copy="${p.id}" data-example="${i}">📋 Copy example</button>
-          </div>`).join('')}
-        </div>` : '';
-  return `
-    <div class="prompt-card${isOpen ? ' expanded' : ''}" data-card="${p.id}">
-      <div class="card-header">
-        <div class="card-icon">${escapeHtml(p.icon)}</div>
-        <div class="card-meta">
-          <p class="card-title">${escapeHtml(p.title)}</p>
-          <div class="badge-row">
-            <span class="badge ${escapeHtml(p.tag_class)}">${escapeHtml(p.tag_label)}</span>
-            ${purposeBadges}
-          </div>
-        </div>
-        <span class="chev${isOpen ? ' open' : ''}">▾</span>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Learn to build <em>with</em> AI, not just prompt it.</h1>
+      <p class="lede">A 6-level quest for college students. You attempt every task yourself first, then pair with AI using battle-tested prompts, then reflect on what it did differently. That habit is what employers hire for.</p>
+      <div class="actions" id="hero-actions">
+        <a class="btn btn-primary" href="roadmap.html">Start level 1</a>
+        <a class="btn" href="library.html">Browse the prompt library</a>
       </div>
-      <p class="card-preview">${escapeHtml(p.preview)}</p>
-      <div class="card-body${isOpen ? ' open' : ''}">
-        <div class="purpose-note">💡 <strong>When to use:</strong> ${escapeHtml(p.purpose_note)}</div>
-        <div class="section-label">Prompt template</div>
-        <pre class="prompt-text">${escapeHtml(p.prompt_text)}</pre>
-        <div class="btn-row">
-          <button class="action-btn" data-copy="${p.id}">📋 Copy prompt</button>
-          ${sourceHtml}
+    </div>
+  </section>
+
+  <section class="loop" aria-labelledby="loop-title">
+    <div class="wrap">
+      <h2 id="loop-title">Every step follows the same loop</h2>
+      <p>AI is a pair programmer, not an answer key. The loop keeps the thinking yours and makes AI a multiplier instead of a crutch.</p>
+      <div class="loop-flow">
+        <div class="loop-stage lead">
+          <h3>Attempt</h3>
+          <p>Work the task on your own first: restate it, plan it, try it. Write down your approach, even if it's rough.</p>
+          <span class="xp-tag">+25 XP try-first bonus</span>
         </div>
-        ${examplesHtml}
+        <span class="loop-arrow" aria-hidden="true"></span>
+        <div class="loop-stage">
+          <h3>Pair</h3>
+          <p>Use the step's linked prompts to get hints, a review, or a second approach. Compare, don't copy.</p>
+        </div>
+        <span class="loop-arrow" aria-hidden="true"></span>
+        <div class="loop-stage">
+          <h3>Reflect</h3>
+          <p>Write what the AI did differently and what you'll do next time. This is where the learning sticks.</p>
+          <span class="xp-tag">+25 XP reflection bonus</span>
+        </div>
       </div>
-    </div>`;
-}
+    </div>
+  </section>
 
-function flash(btn) {
-  const original = btn.textContent;
-  btn.classList.add('copied');
-  btn.textContent = '✓ Copied!';
-  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 2000);
-}
+  <section class="contrast" aria-labelledby="contrast-title">
+    <div class="wrap">
+      <h2 id="contrast-title">Vibe coder or AI-assisted developer?</h2>
+      <div class="contrast-table">
+        <div class="head">Vibe coder</div><div class="head good">AI-assisted developer</div>
+        <div>Pastes the assignment into a chatbot</div><div>Restates the problem and lists edge cases first</div>
+        <div>Accepts the first answer that compiles</div><div>Tests it, verifies claims, and checks the docs</div>
+        <div>Can't explain the code in an interview</div><div>Can walk through every line and its trade-offs</div>
+        <div>Pastes the error back into AI on loop</div><div>Reads the stack trace and forms a hypothesis</div>
+        <div>Ships one giant commit</div><div>Ships small, reviewed, tested commits</div>
+      </div>
+    </div>
+  </section>
 
-async function copyText(text, btn) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  }
-  flash(btn);
-}
+  <section class="path-preview" aria-labelledby="path-title">
+    <div class="wrap">
+      <h2 id="path-title">Six levels to job-ready</h2>
+      <ol class="path-list" id="path-list">
+        <li><span class="lvl-num">1</span><div><h3>Loading the path…</h3></div></li>
+      </ol>
+    </div>
+  </section>
+</main>
 
-document.addEventListener('click', e => {
-  const chipBtn = e.target.closest('.chip');
-  if (chipBtn) {
-    const { kind, id } = chipBtn.dataset;
-    if (kind === 'col') { activeCol = id; activeCat = 'all'; }
-    if (kind === 'cat') activeCat = id;
-    if (kind === 'purpose') activePurpose = id;
-    renderFilters();
-    renderCards();
-    return;
-  }
-
-  const copyBtn = e.target.closest('[data-copy]');
-  if (copyBtn) {
-    const p = prompts.find(x => x.id === Number(copyBtn.dataset.copy));
-    const ex = copyBtn.dataset.example;
-    copyText(ex === undefined ? p.prompt_text : p.examples[Number(ex)].prompt, copyBtn);
-    return;
-  }
-
-  if (e.target.closest('a, pre')) return;
-  const card = e.target.closest('.prompt-card');
-  if (!card) return;
-  const expanded = card.classList.contains('expanded');
-  if (expanded && !e.target.closest('.card-header')) return;
-  const id = Number(card.dataset.card);
-  expanded ? openCards.delete(id) : openCards.add(id);
-  card.classList.toggle('expanded', !expanded);
-  card.querySelector('.card-body').classList.toggle('open', !expanded);
-  card.querySelector('.chev').classList.toggle('open', !expanded);
-});
-
-document.getElementById('search-input').addEventListener('input', renderCards);
-
-loadPrompts();
-</script>
+<footer id="site-footer"></footer>
 </body>
 </html>

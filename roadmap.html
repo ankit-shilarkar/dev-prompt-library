@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — Dev Prompt Library</title>
+<meta name="description" content="A 6-level, 24-step quest to become an AI-assisted developer: attempt first, pair with AI, reflect, earn XP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="assets/js/roadmap.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1>The AI-assisted developer roadmap</h1>
+    <p>Six levels, twenty-four steps. Pick any step, do the activity yourself first, pair with the linked prompts, then log what you learned.</p>
+  </div>
+  <div id="player-slot"></div>
+  <div class="roadmap">
+    <nav class="quest-path" id="quest-path" aria-label="Roadmap steps">
+      <div class="loading-state"><h2>Loading your quest…</h2></div>
+    </nav>
+    <article class="step-panel" id="step-panel" aria-live="polite"></article>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+</body>
+</html>
