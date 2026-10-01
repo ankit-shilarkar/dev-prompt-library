@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt library — Dev Prompt Library</title>
+<meta name="description" content="124 AI prompts for software engineers, each with a when-to-use note and worked examples.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="assets/js/library.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1>Prompt library</h1>
+    <p>Every prompt has a "when to use" note and worked examples. Use them as a pair programmer after you've tried the problem yourself. Patterns from <a href="https://kunalganglani.com" target="_blank" rel="noopener">The Complete Prompt Playbook by Kunal Ganglani</a> (v1.0, March 2026) are credited to the author.</p>
+  </div>
+  <div class="library">
+    <aside class="filters" id="filters" aria-label="Filters"></aside>
+    <section aria-label="Prompts">
+      <div class="results-bar">
+        <label class="visually-hidden" for="search">Search prompts</label>
+        <input id="search" type="search" placeholder="Search titles, use cases, examples…" autocomplete="off">
+        <span class="results-count" id="results-count" aria-live="polite"></span>
+      </div>
+      <ul class="prompt-list" id="prompt-list">
+        <li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+</body>
+</html>

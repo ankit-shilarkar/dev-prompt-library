@@ -17,7 +17,7 @@ Before submitting, check your prompt against these:
 
 ## How to add a prompt
 
-Prompts are stored in the Supabase `prompts` table (schema: [`supabase/schema.sql`](./supabase/schema.sql)), not in the HTML.
+Prompts are stored in the Supabase `prompts` table (schema: [`supabase/migrations/001_prompts.sql`](./supabase/migrations/001_prompts.sql)), not in the HTML.
 Maintainers add them in the Supabase SQL Editor; contributors can open an issue or PR containing the SQL below and a maintainer will run it.
 
 ```sql
@@ -100,12 +100,20 @@ Open an issue with:
 
 ---
 
+## Adding or editing a roadmap step
+
+Edit `data/roadmap.json`. Each step needs a stable `id` (progress is saved against it), a `why`, an `activity` with a `deliverable`, a `tryFirst` checklist the student does without AI, 1-3 `prompts` (prompt IDs), and `reflect` questions. Never rename an existing step `id`.
+
+---
+
 ## Repo structure
 
 ```
 dev-prompt-library/
-├── index.html                  ← the prompt library UI (loads prompts from Supabase)
-├── supabase/schema.sql         ← prompts table, RLS policy, indexes
+├── index.html · roadmap.html · library.html · admin.html
+├── assets/                     ← CSS tokens/components and JS modules
+├── data/roadmap.json           ← roadmap content (levels → steps)
+├── supabase/migrations/        ← database schema, in order
 ├── frontend-integration.md     ← template output file for the codebase scanner prompt
 ├── README.md
 ├── CONTRIBUTING.md             ← this file
@@ -115,12 +123,13 @@ dev-prompt-library/
 
 ---
 
-## Code style (for the HTML file)
+## Code style
 
-- Prompts belong in the database, not in the HTML
-- Do not change the CSS or JS logic unless fixing a bug
-- Every field rendered into the page must go through `escapeHtml`
-- No minification — keep it readable
+- Prompts belong in the database, roadmap content in `data/roadmap.json`, never hardcoded in HTML
+- Every value rendered into the page must go through `esc()` from `assets/js/core.js`
+- Use the tokens in `assets/css/tokens.css` instead of raw colours
+- Run `npx impeccable detect index.html roadmap.html library.html admin.html assets/css assets/js` before opening a PR
+- No minification or build step: keep it readable
 
 ---
 

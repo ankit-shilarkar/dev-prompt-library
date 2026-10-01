@@ -1,0 +1,534 @@
+{
+  "version": 1,
+  "xp": { "step": 50, "tryFirstBonus": 25, "reflectionBonus": 25 },
+  "levels": [
+    {
+      "id": "l1",
+      "title": "Think Before You Prompt",
+      "badge": "Thinker",
+      "goal": "Understand a problem well enough to explain it before asking anyone, human or AI, for help.",
+      "steps": [
+        {
+          "id": "l1-restate",
+          "title": "Restate the problem in your own words",
+          "skill": "Problem comprehension",
+          "why": "Most wrong answers start with a misread question. If you can't restate the problem, you can't judge whether an AI answer solves it.",
+          "activity": {
+            "task": "Pick any LeetCode Easy problem you haven't solved. Without coding, write: (1) the problem in one sentence, (2) the inputs and outputs with types, (3) one example worked by hand.",
+            "deliverable": "A 5-8 line problem summary you could hand to a friend."
+          },
+          "tryFirst": [
+            "Read the problem twice, slowly",
+            "Underline every constraint (sizes, ranges, edge cases)",
+            "Work one example by hand on paper"
+          ],
+          "prompts": [69, 28],
+          "reflect": [
+            "Did the AI's rephrasing notice anything you missed?",
+            "Which constraint would have changed your approach if you'd ignored it?"
+          ]
+        },
+        {
+          "id": "l1-examples",
+          "title": "Write test cases before solutions",
+          "skill": "Thinking in examples",
+          "why": "Examples are how you check understanding. Writing them first means you have a way to verify any solution, including one an AI writes.",
+          "activity": {
+            "task": "For the same problem, write 6 test cases: 2 normal, 2 edge (empty, single element, max size), 2 tricky (duplicates, negatives, unsorted).",
+            "deliverable": "A table of input → expected output with one line on why each case matters."
+          },
+          "tryFirst": [
+            "Ask: what's the smallest input? the largest?",
+            "Ask: what input would break a naive solution?",
+            "Compute every expected output by hand"
+          ],
+          "prompts": [29, 12],
+          "reflect": [
+            "Which test cases did the AI add that you didn't think of?",
+            "Did any of your expected outputs turn out to be wrong?"
+          ]
+        },
+        {
+          "id": "l1-assumptions",
+          "title": "Surface your assumptions",
+          "skill": "Spotting hidden assumptions",
+          "why": "90% of wrong answers come from wrong assumptions, not wrong reasoning. Juniors assume silently; seniors say their assumptions out loud.",
+          "activity": {
+            "task": "Take a vague college-project requirement (e.g. \"build a login page\"). List every assumption you'd have to make, and mark each Safe / Risky / Unknown.",
+            "deliverable": "An assumption table and 3 questions you'd ask before building."
+          },
+          "tryFirst": [
+            "List at least 8 assumptions on your own",
+            "Mark which ones would cause rework if wrong",
+            "Turn the Unknowns into questions"
+          ],
+          "prompts": [89, 82],
+          "reflect": [
+            "Which assumption would have cost you the most time if you'd guessed wrong?",
+            "How many of the AI's assumptions were ones you'd never have questioned?"
+          ]
+        },
+        {
+          "id": "l1-principle",
+          "title": "Find the principle behind the problem",
+          "skill": "Abstraction",
+          "why": "Problems that look new usually belong to a family you already know. Naming the family turns one problem into a reusable skill.",
+          "activity": {
+            "task": "Pick 3 problems you've solved before. For each, name the underlying principle or pattern (e.g. two pointers, hashing for lookup, BFS for shortest path) and one other problem it solves.",
+            "deliverable": "A 3-row table: problem → principle → another problem it applies to."
+          },
+          "tryFirst": [
+            "Ask: what is this problem really about?",
+            "Recall a similar problem you've seen",
+            "Name the pattern before looking anything up"
+          ],
+          "prompts": [70, 84],
+          "reflect": [
+            "Did the AI name a more general principle than you did?",
+            "Where else could you use this pattern this week?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Break It Down",
+      "badge": "Planner",
+      "goal": "Split big tasks into small, ordered steps you can finish and check one at a time.",
+      "steps": [
+        {
+          "id": "l2-decompose",
+          "title": "Decompose into sub-problems",
+          "skill": "Decomposition",
+          "why": "Large problems feel impossible because you're holding all of them at once. Small pieces are each easy, and the order between them is the real plan.",
+          "activity": {
+            "task": "Take a feature like \"users can reset their password by email\". Break it into the smallest sub-problems you can, ordered so each builds on the last.",
+            "deliverable": "A numbered list of 6-12 sub-problems, each finishable in under an hour."
+          },
+          "tryFirst": [
+            "Write the end state first, then work backwards",
+            "Keep splitting until each piece takes under an hour",
+            "Mark which pieces depend on others"
+          ],
+          "prompts": [77, 43],
+          "reflect": [
+            "Was your first split too big, too small, or in the wrong order?",
+            "Which sub-problem did the AI include that you'd have forgotten until the end?"
+          ]
+        },
+        {
+          "id": "l2-plan",
+          "title": "Plan before you code",
+          "skill": "Planning",
+          "why": "Ten minutes of planning saves hours of rewriting. AI is fastest when you hand it a plan, not a wish.",
+          "activity": {
+            "task": "For a small CRUD app of your choice (to-do list, expense tracker), write a plan: data model, list of screens or endpoints, and the order you'll build them.",
+            "deliverable": "A one-page plan with a build order and a definition of done for each part."
+          },
+          "tryFirst": [
+            "Sketch the data model on paper",
+            "List the endpoints or screens",
+            "Decide what 'done' means for each one"
+          ],
+          "prompts": [43, 8],
+          "reflect": [
+            "What did the AI question in your plan, and was it right?",
+            "Which part of the plan are you least sure about now?"
+          ]
+        },
+        {
+          "id": "l2-options",
+          "title": "Compare approaches before picking one",
+          "skill": "Trade-off thinking",
+          "why": "There is rarely one right answer. Comparing options on purpose is what turns a coder into an engineer.",
+          "activity": {
+            "task": "Choose a decision in your project (e.g. where to store data: localStorage, a SQL database, or Firebase). Describe 3 options and score each on effort, risk, and fit.",
+            "deliverable": "A small comparison table and a one-sentence decision with your reason."
+          },
+          "tryFirst": [
+            "Name 3 genuinely different options",
+            "Write one way each could go wrong",
+            "Commit to a choice before asking the AI"
+          ],
+          "prompts": [31, 57],
+          "reflect": [
+            "Did the AI pick the same option? If not, whose reasoning was stronger?",
+            "What would make you change your decision later?"
+          ]
+        },
+        {
+          "id": "l2-constraints",
+          "title": "Lock your requirements",
+          "skill": "Requirement tracking",
+          "why": "AI (and humans) reliably satisfy most requirements and quietly drop the rest. A numbered checklist makes 'done' checkable.",
+          "activity": {
+            "task": "Take an assignment brief or a job-posting take-home task. Number every requirement, then check a finished solution against the list.",
+            "deliverable": "A numbered requirement list with ✅ or ❌ and evidence for each."
+          },
+          "tryFirst": [
+            "Extract every 'must' and 'should' yourself",
+            "Look for requirements hidden in examples",
+            "Mark conflicts between requirements"
+          ],
+          "prompts": [88, 35],
+          "reflect": [
+            "How many requirements did you miss on the first read?",
+            "Did the AI's solution actually satisfy all of them?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Read & Understand Code",
+      "badge": "Reader",
+      "goal": "Read code you didn't write, including AI-generated code, and explain it accurately.",
+      "steps": [
+        {
+          "id": "l3-explain",
+          "title": "Explain code you didn't write",
+          "skill": "Code reading",
+          "why": "You will read far more code than you write. If you can't explain AI-generated code, you can't own it, debug it, or defend it in an interview.",
+          "activity": {
+            "task": "Pick a 30-60 line file from an open-source project or a classmate's repo. Write a plain-English explanation and add a comment to every block.",
+            "deliverable": "The commented file and a 5-sentence summary of what it does and why."
+          },
+          "tryFirst": [
+            "Read top to bottom once without stopping",
+            "Trace one input through the code by hand",
+            "Write your explanation before asking AI"
+          ],
+          "prompts": [98, 11],
+          "reflect": [
+            "What did you misunderstand that the AI explained?",
+            "What did the AI explain wrongly or vaguely?"
+          ]
+        },
+        {
+          "id": "l3-trace",
+          "title": "Trace data through a codebase",
+          "skill": "Following data flow",
+          "why": "Real bugs live between files. Following one request from button click to database is the skill that makes you useful on day one of a job.",
+          "activity": {
+            "task": "In any full-stack project, trace one action (e.g. 'Add to cart') from the UI event to the database write and back. Name every file and function it passes through.",
+            "deliverable": "A numbered trace of 6-15 hops with file:function for each."
+          },
+          "tryFirst": [
+            "Start from the UI and search for the handler",
+            "Follow imports and calls, writing each hop down",
+            "Note where data changes shape"
+          ],
+          "prompts": [2, 26],
+          "reflect": [
+            "Which hop was hardest to find, and how did you find it?",
+            "Did the AI's map of the codebase match your trace?"
+          ]
+        },
+        {
+          "id": "l3-concept",
+          "title": "Learn one concept deeply",
+          "skill": "Deep understanding",
+          "why": "Interviews test whether you understand why, not whether you can recite what. One concept learned deeply beats ten skimmed.",
+          "activity": {
+            "task": "Pick one concept you use but can't fully explain (closures, HashMap internals, indexes, the event loop). Write your own explanation with an example and one common mistake.",
+            "deliverable": "A half-page explanation you could teach to a junior."
+          },
+          "tryFirst": [
+            "Write what you think it is, from memory",
+            "Build a tiny example and run it",
+            "Predict an output, then check it"
+          ],
+          "prompts": [13, 86],
+          "reflect": [
+            "What did the AI's Socratic questions expose in your understanding?",
+            "Can you now explain it without notes?"
+          ]
+        },
+        {
+          "id": "l3-pattern",
+          "title": "Solve a DSA problem with a mentor, not a solver",
+          "skill": "Pattern practice",
+          "why": "Copying solutions feels like progress but isn't. Using AI as a hint-giver keeps the thinking yours.",
+          "activity": {
+            "task": "Solve one LeetCode Medium. Use the DSA mentor prompt so the AI only gives hints. Write down each hint you needed.",
+            "deliverable": "Your accepted solution, its complexity, and the list of hints you used."
+          },
+          "tryFirst": [
+            "Spend at least 20 minutes before any hint",
+            "Write a brute-force solution first",
+            "State the time complexity of your approach"
+          ],
+          "prompts": [18, 30],
+          "reflect": [
+            "Which hint unlocked the problem, and could you have found it yourself?",
+            "What pattern will you recognise next time?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Debug Like a Scientist",
+      "badge": "Debugger",
+      "goal": "Find root causes with evidence instead of guessing, and verify AI answers before trusting them.",
+      "steps": [
+        {
+          "id": "l4-hypothesis",
+          "title": "Debug with hypotheses",
+          "skill": "Scientific debugging",
+          "why": "Random changes until it works teaches you nothing and often hides the real bug. Hypotheses make debugging fast and repeatable.",
+          "activity": {
+            "task": "Next time something breaks, before changing any code write: verified facts, 3 hypotheses ranked by likelihood, and what you'd expect to see if each were true. Then test the top one.",
+            "deliverable": "A short debugging log: facts → hypotheses → test → result."
+          },
+          "tryFirst": [
+            "Write only facts you've verified",
+            "Rank 3 possible causes",
+            "Design one check that separates them"
+          ],
+          "prompts": [87, 48],
+          "reflect": [
+            "Was your most likely hypothesis right?",
+            "What evidence would have saved you the most time?"
+          ]
+        },
+        {
+          "id": "l4-errors",
+          "title": "Read errors and logs properly",
+          "skill": "Error literacy",
+          "why": "Most error messages tell you exactly what's wrong if you read them carefully. Pasting them straight into AI skips the skill you need most.",
+          "activity": {
+            "task": "Collect 3 real error messages or stack traces from your projects. For each, find the line that matters, explain the error in your own words, and fix it.",
+            "deliverable": "3 entries: error → the key line → your explanation → the fix."
+          },
+          "tryFirst": [
+            "Find the first line that mentions your code",
+            "Read the error type and message word by word",
+            "Search the docs before asking AI"
+          ],
+          "prompts": [118, 116],
+          "reflect": [
+            "How close was your explanation to the AI's?",
+            "Which part of a stack trace do you now read first?"
+          ]
+        },
+        {
+          "id": "l4-bugs",
+          "title": "Find bugs in code that runs",
+          "skill": "Bug hunting",
+          "why": "The worst bugs don't crash; they quietly do the wrong thing. Spotting them is what code reviewers and interviewers look for.",
+          "activity": {
+            "task": "Take a function you wrote this month. List what it should do, then hunt for cases where it doesn't: off-by-one, null inputs, wrong comparisons, missing awaits.",
+            "deliverable": "At least 2 bugs or risks found, each with a failing input and a fix."
+          },
+          "tryFirst": [
+            "Write the expected behaviour first",
+            "Try empty, null, and boundary inputs",
+            "Look for missing awaits and == vs ==="
+          ],
+          "prompts": [99, 3],
+          "reflect": [
+            "Did the AI find a bug you missed? What kind?",
+            "Did the AI claim a bug that wasn't real?"
+          ]
+        },
+        {
+          "id": "l4-verify",
+          "title": "Verify AI answers before trusting them",
+          "skill": "AI fact-checking",
+          "why": "AI states guesses with the same confidence as facts. A vibe coder ships the guess; an AI-assisted developer verifies it.",
+          "activity": {
+            "task": "Ask an AI a factual technical question you care about. Then verify every claim against official docs or by running code, and mark each claim correct, partly correct, or wrong.",
+            "deliverable": "The AI answer with each claim marked and a source or test for each."
+          },
+          "tryFirst": [
+            "Write what you believe the answer is first",
+            "Find the official docs page for the topic",
+            "Decide how you'll test each claim"
+          ],
+          "prompts": [68, 96],
+          "reflect": [
+            "How many claims were wrong or outdated?",
+            "Which kinds of questions will you always verify from now on?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l5",
+      "title": "Build in Small Chunks",
+      "badge": "Builder",
+      "goal": "Build features in small, tested, reviewed increments: the habit that separates professionals from vibe coders.",
+      "steps": [
+        {
+          "id": "l5-tests",
+          "title": "Write tests that catch real bugs",
+          "skill": "Testing",
+          "why": "Tests are how you prove code works, whoever wrote it. They're also the safety net that lets you use AI to change code without fear.",
+          "activity": {
+            "task": "Pick one function with real logic (validation, pricing, dates). Write tests covering happy path, edge cases, and errors before asking AI for more.",
+            "deliverable": "A test file with at least 6 tests, all passing."
+          },
+          "tryFirst": [
+            "Write test names first (should_X_when_Y)",
+            "Cover one edge case per input",
+            "Make one test fail on purpose to check it works"
+          ],
+          "prompts": [49, 12],
+          "reflect": [
+            "Which AI-suggested test caught something real?",
+            "Which AI-suggested test was pointless?"
+          ]
+        },
+        {
+          "id": "l5-commits",
+          "title": "Ship in small commits and PRs",
+          "skill": "Version control discipline",
+          "why": "Small commits are easy to review, revert, and explain. Interviewers and teams judge you by your git history.",
+          "activity": {
+            "task": "Build one small feature in at least 4 commits, each doing one thing, then open a PR with a clear description.",
+            "deliverable": "A PR link with 4+ focused commits and a What / Why / How to test description."
+          },
+          "tryFirst": [
+            "Plan the commits before coding",
+            "Write each commit message yourself first",
+            "Describe how a reviewer should test it"
+          ],
+          "prompts": [52, 51],
+          "reflect": [
+            "How did the AI's commit messages differ from yours?",
+            "Would a reviewer understand your PR without asking you?"
+          ]
+        },
+        {
+          "id": "l5-review",
+          "title": "Review your own code like a senior",
+          "skill": "Self-review",
+          "why": "Catching your own mistakes before review builds trust fast. Asking AI to review is useful only if you reviewed first.",
+          "activity": {
+            "task": "Before your next PR, review your own diff with a checklist: bugs, security, performance, naming. Then run the AI review and compare.",
+            "deliverable": "Two lists, your findings and the AI's, with what you fixed."
+          },
+          "tryFirst": [
+            "Read the diff as if someone else wrote it",
+            "Check every input for validation",
+            "Look for duplicated logic"
+          ],
+          "prompts": [47, 20, 37],
+          "reflect": [
+            "What percentage of the AI's findings had you already caught?",
+            "Which AI finding was wrong, and how did you know?"
+          ]
+        },
+        {
+          "id": "l5-refactor",
+          "title": "Refactor without breaking things",
+          "skill": "Safe change",
+          "why": "Real jobs are mostly changing existing code. Refactoring with tests in place is how you improve code without fear.",
+          "activity": {
+            "task": "Pick your messiest file. Make sure it has tests, then refactor one thing at a time (rename, extract function, remove duplication), running tests after each change.",
+            "deliverable": "A before/after diff, green tests, and one sentence per change on why it's better."
+          },
+          "tryFirst": [
+            "Get tests passing before touching anything",
+            "Change one thing, then run tests",
+            "Stop when it's clearer, not perfect"
+          ],
+          "prompts": [50, 5],
+          "reflect": [
+            "Did any AI refactor change behaviour? Did your tests catch it?",
+            "Which change made the biggest difference to readability?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l6",
+      "title": "Ship & Get Job-Ready",
+      "badge": "Shipper",
+      "goal": "Deploy, document, and explain your work so recruiters and interviewers can see what you can do.",
+      "steps": [
+        {
+          "id": "l6-deploy",
+          "title": "Deploy a project for real",
+          "skill": "Deployment",
+          "why": "A live link beats a GitHub repo nobody runs. Deploying teaches environment config, secrets, and builds, all things you'll do at work.",
+          "activity": {
+            "task": "Deploy one of your projects to a free host with automatic deploys from your main branch. Add a health check or status page.",
+            "deliverable": "A live URL and a short note on how deploys work."
+          },
+          "tryFirst": [
+            "Read your host's quick-start docs",
+            "List the environment variables your app needs",
+            "Try a manual deploy before automating it"
+          ],
+          "prompts": [119, 120, 10],
+          "reflect": [
+            "What broke during deployment that never broke locally?",
+            "Which part of the AI's pipeline did you have to fix?"
+          ]
+        },
+        {
+          "id": "l6-docs",
+          "title": "Document your project",
+          "skill": "Technical writing",
+          "why": "Clear docs show you understand your own work. A good README is the first thing a recruiter reads.",
+          "activity": {
+            "task": "Write a README for your deployed project: what it does, screenshot, tech stack, how to run it, and one design decision you're proud of.",
+            "deliverable": "A README a stranger could follow to run your project in 10 minutes."
+          },
+          "tryFirst": [
+            "Write the README before asking AI",
+            "Ask a friend to follow it and note where they get stuck",
+            "Explain one decision in your own words"
+          ],
+          "prompts": [53, 73],
+          "reflect": [
+            "What did the AI's critique say was missing?",
+            "Did your friend get stuck somewhere the AI didn't predict?"
+          ]
+        },
+        {
+          "id": "l6-design",
+          "title": "Explain a system design",
+          "skill": "System thinking",
+          "why": "Interviews for good roles ask how you'd design systems. Explaining your own project's design is the best practice you can get.",
+          "activity": {
+            "task": "Draw the architecture of your project (boxes and arrows), then answer: what breaks at 100x users, and how would you fix it?",
+            "deliverable": "A diagram and a one-page scaling plan."
+          },
+          "tryFirst": [
+            "Draw it on paper first",
+            "Find the single point of failure",
+            "Estimate requests per second at 100x"
+          ],
+          "prompts": [6, 78, 95],
+          "reflect": [
+            "Which bottleneck did the AI spot that you missed?",
+            "Could you defend your design to a skeptical interviewer?"
+          ]
+        },
+        {
+          "id": "l6-interview",
+          "title": "Practise interviews with honest feedback",
+          "skill": "Interview readiness",
+          "why": "Interviewing is a skill you can practise. Mock interviews with brutal scoring show your gaps while they're still cheap to fix.",
+          "activity": {
+            "task": "Run one full mock interview (DSA + design + behavioural). Answer out loud or in writing without looking anything up. Record your scores.",
+            "deliverable": "Your scores per section and a 2-week plan for your weakest area."
+          },
+          "tryFirst": [
+            "Answer without any notes or lookups",
+            "Time yourself like a real interview",
+            "Write your own self-score before seeing the AI's"
+          ],
+          "prompts": [14, 15, 16],
+          "reflect": [
+            "Where did your self-score differ most from the AI's?",
+            "What is the single gap you'll close first?"
+          ]
+        }
+      ]
+    }
+  ]
+}
