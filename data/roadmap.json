@@ -175,6 +175,26 @@
             "How many requirements did you miss on the first read?",
             "Did the AI's solution actually satisfy all of them?"
           ]
+        },
+        {
+          "id": "l2-brief",
+          "title": "Write a brief, not a wish",
+          "skill": "Specifying work for AI",
+          "why": "A one-line prompt gets a generic result because the AI fills every gap with guesses. Ibrahim Shareefi built the same cafe site from a 15-word, a 52-word and a 477-word prompt: only the last one asked questions, planned, and tested itself. Writing that kind of brief is just breaking a problem down and locking its requirements, aimed at an AI.",
+          "activity": {
+            "task": "Pick a real one-page site (your club, a family shop, a fest). Write three prompts for it yourself: OK (one line), GOOD (about 50 words: what, who, sections, style), and ITQAN (the job in 10 seconds, about the place, measurable rules, a self-check, and 'ask me up to 5 questions first'). Run all three in an AI builder and compare the results.",
+            "deliverable": "Your three prompts, a screenshot of each result, and a list of what the ITQAN version got right that the others missed."
+          },
+          "tryFirst": [
+            "Write 'the job' as what a visitor must know within 10 seconds",
+            "Turn each wish ('looks good on phones') into a rule you can check (390x664, 16px text, 44px tap targets)",
+            "Write your own ITQAN prompt before opening the template"
+          ],
+          "prompts": [125, 82, 88],
+          "reflect": [
+            "Which of the AI's questions made you decide something you hadn't thought about?",
+            "Which rule in your brief caught a real problem in the result?"
+          ]
         }
       ]
     },

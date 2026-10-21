@@ -13,7 +13,7 @@
 
 Students can now generate code faster than they can understand it. That makes "vibe coders": people who ship what a chatbot wrote but can't explain, debug, or extend it. Employers hire the opposite: developers who use AI as a multiplier on their own thinking.
 
-This site trains that habit with one loop, repeated across 24 steps:
+This site trains that habit with one loop, repeated across 25 steps:
 
 1. **Attempt**: do the task yourself first and write down your approach.
 2. **Pair**: use the step's linked prompts to get hints, reviews, or a second approach.
@@ -28,7 +28,7 @@ XP rewards the loop, not the copy button: 50 for finishing a step, +25 for tryin
 | Page | What it does |
 |---|---|
 | **Home** (`index.html`) | The pitch, the loop, and the 6-level path |
-| **Roadmap** (`roadmap.html`) | Quest path of 6 levels × 4 steps; each step has a why, an activity with a deliverable, a try-first checklist, linked prompts, and an activity log |
+| **Roadmap** (`roadmap.html`) | Quest path of 6 levels and 25 steps; each step has a why, an activity with a deliverable, a try-first checklist, linked prompts, and an activity log |
 | **Prompt library** (`library.html`) | 124 prompts with "when to use" notes and 3 worked examples each; filter by collection, purpose, and category |
 | **Admin** (`admin.html`) | Learning analytics for the course owner: players, AI-usage split, step funnel, daily activity, most-copied prompts, recent reflections |
 
@@ -37,7 +37,7 @@ XP rewards the loop, not the copy button: 50 for finishing a step, +25 for tryin
 | Level | Badge | Builds |
 |---|---|---|
 | 1 · Think Before You Prompt | Thinker | Restating problems, test cases first, assumptions, principles |
-| 2 · Break It Down | Planner | Decomposition, planning, trade-offs, requirement checklists |
+| 2 · Break It Down | Planner | Decomposition, planning, trade-offs, requirement checklists, writing briefs for AI |
 | 3 · Read & Understand Code | Reader | Code reading, data-flow tracing, deep concepts, DSA with hints |
 | 4 · Debug Like a Scientist | Debugger | Hypotheses, error literacy, bug hunting, verifying AI answers |
 | 5 · Build in Small Chunks | Builder | Tests, small commits/PRs, self-review, safe refactoring |
@@ -47,11 +47,12 @@ Content lives in [`data/roadmap.json`](./data/roadmap.json). The format (levels 
 
 ### The prompt library
 
-**124 prompts**, sourced and attributed:
+**125 prompts**, sourced and attributed:
 
 | Source | Prompts |
 |---|---|
 | [The Complete Prompt Playbook](https://kunalganglani.com) by Kunal Ganglani | 97 |
+| [Ibrahim Shareefi (@shareefico)](https://www.instagram.com/shareefico/) | 1 |
 | [@itsaiguide](https://www.instagram.com/itsaiguide) (Instagram) | 10 |
 | [Anthropic Prompt Library](https://docs.anthropic.com/en/prompt-library) | 3 |
 | X/Twitter community | 3 |
@@ -59,6 +60,8 @@ Content lives in [`data/roadmap.json`](./data/roadmap.json). The format (levels 
 
 All 97 patterns from **The Complete Prompt Playbook — 100+ Battle-Tested Patterns for Developers Who Ship**
 by **Kunal Ganglani | [kunalganglani.com](https://kunalganglani.com)**, Version 1.0 — March 2026, are credited to the author ("Share freely. Attribution appreciated."). Sections: Foundation, Reference, Pro Patterns, Daily Use.
+
+The **ITQAN website brief** (OK → GOOD → ITQAN) is by **Ibrahim Shareefi ([@shareefico](https://www.instagram.com/shareefico/))**, republished with permission.
 
 ---
 
